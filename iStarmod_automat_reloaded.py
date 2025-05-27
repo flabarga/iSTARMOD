@@ -1,6 +1,6 @@
 #=======================================================================
-## Name:     STARMOD
-# Filename: starmod.f
+## Name:     iSTARMOD_AUTOMAT_RELOADED
+# Filename: 
 # Type:     program
 ################################################################
 # Language: Python 2.7
@@ -17,34 +17,13 @@
 # Modifications:    dph = David Huenemoerder     adw = Alan Welty
 # Migration to Python  Fernando Labarga 2017
 ################################################################
-#   xx-may-85  dph  Modified for CRDS 
-#                   File i/o changed to handle bmo format files.
-#   xx-jun-88  dph  sshft & tshft removed from read, forced to zero;
-#                   (allows iraf/unix file names of arbitrary length)
-#   xx-jul-88  dph  modified more to suit iraf:
-#                   file num may now be 4 digits
-#                   (i.e. syn1234, num from 1st line of input file);
-#                   '.dat' suffix dropped from filenames.
-#   03-nov-88  dph  read lines from iraf 2d echelle images.
-#                   Line numbers are now read after the filenames.
-#   28-jul-92  adw  Fixes for IRAF header format changes;
-#                   make code more readable; allow 1D and 2D data.
-#   12-aug-92  adw  Work out a few minor bugs; format output
-#   04-feb-93  adw  Minor tweaks to parm search; add output switch
-#   10-mar-93  adw  Put UT & DATE-OBS of object in output header
-#   21-jun-93  adw  New broadening subroutine ("starot" from "disk") 
-#                   and fix up broadening test loop
-#   04-jan-94  adw  Eliminate unused stuff.  Use new FFT starot.
-#   29-mar-94  adw  Fix data array setup logic.
-#   25-apr-94  adw  Final fixes for release to interested parties.
 #   15-feb-17  ffla Migration from FORTRAN code to python
-#                   Correction of the features of the kernel/broadening function in starot
+#              Correction of the features of the kernel/broadening function in starot
 ################################################################################################
 ################################################################################################
 
 import os 
 import matplotlib.pyplot as plt
-# import iStarmod_fits as fits_tools
 from iStarmod_fits import * 
 import iStarmod_tools as tools
 import support as supp
@@ -174,11 +153,7 @@ def starmod(spcfFile, debugging = False):
             # rv_outfile = open(filenameRV2, 'a')
             print ("outfilenameRV:" , filenameRV2)
     ############################################################################################################
-    
-        
-    ##################################################################################3
-    ##################################################################################3
-    
+       
     ##################################################################################3
     #READING and plotting THE OBJECT FITS FILE
     ##################################################################################3
