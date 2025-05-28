@@ -1,4 +1,4 @@
-######################### INPUT FILE FOR fstarmod #############################
+######################### INPUT FILE FOR istarmod #############################
 
 ###### A '#' begins a comment till the end of the line
 ###### The syntax is 'KEYWORD = value' with one statement per line
@@ -17,7 +17,7 @@ SYN_SPEC = YES                 # write output spectra: YES/NO
 N_ITER = 8                      # iteration number: integer
 PIX_ZONE = 8460 8530  wvl       # pixel range for the fit: 2 integers
 PIX_EXCL = 8460 8460  wvl       # 'BLUE EXCLUSION ZONE'	 skip pixel subrange: 2 integers (optional)
-PIX_EXCL = 8492 8502  wvl       # NaD1-D2 ZONE    	 skip pixel subrange: 2 integers (optional)
+PIX_EXCL = 8494 8502  wvl       # CaIRT-a ZONE    	 skip pixel subrange: 2 integers (optional)
 PIX_EXCL = 			# skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
 PIX_EXCL = 			# skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
 PIX_EXCL =			# skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
