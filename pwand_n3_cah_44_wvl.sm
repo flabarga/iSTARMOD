@@ -46,12 +46,12 @@ TER_NAME =  NONE                # tertiary name: name/NONE
 MODE=  ech                      # spectra format if multidimensionnal: mult/ech
    APERTURE=  44                # aperture number : integer
    BAND=                        # band number : integer (UNUSED)
-   LINE= CaIRT-a		# To specify the LINE in order to evaluate the EW
+   LINE= NaD2			# To specify the LINE in order to evaluate the EW
 					# The definition must be compliant with the specification of
 					# the config. file "lambdas.dat"
 ###### ALGORITHM & VISUALISATION PARAMS
-MAXFLUXDISP_OBJ = 1.75 			# Max. flux to display in the object+ref spectra window
-MAXFLUXDISP_SUB = 0.75 			# Max. flux to display in the subtracted spectrum window
+MAXFLUXDISP_OBJ = 1.25 			# Max. flux to display in the object+ref spectra window
+MAXFLUXDISP_SUB = 0.55 			# Max. flux to display in the subtracted spectrum window
 FINDMAX_TOLERANCE = 0.001		# to find the maximum of the subtracted spectra @ calculating the integral 
 ################################# END #########################################
 
