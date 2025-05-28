@@ -3,7 +3,7 @@
 # Filename: 
 # Type:     program
 ################################################################
-# Language: Python 2.7
+# Language: Python 3.4
 # Purpose:  Synthesize a composite spectrum from input templates and 
 #           object spectrum, outputs composite and residual spectrum.
 ################################################################
