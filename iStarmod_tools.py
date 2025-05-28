@@ -922,7 +922,6 @@ class lambdaData(object):
         delta2  = _end_ - self.ldoObs
         
         if nstars == 1:
-
             print("self.ldoObs= ", self.ldoObs, "lambda_factorStart = ", _start_, "lambda_factorEnd= ", _end_)
            ######################################################################################
             mask = (workingLambdas >= self.ldoObs - delta1) & (workingLambdas <= self.ldoObs + delta2)
@@ -931,25 +930,6 @@ class lambdaData(object):
             abs_max_idx    = np.argmax(fluxes_region)
             self.ldoObs = lambdas_region[abs_max_idx]
             abs_max_flux = fluxes_region[abs_max_idx]
-            ####################################################################################y
-            # iterMax = len(fitsObject.workingDataValues3)-1
-            # iterMax2 = len(fitsObject.workingDataValues3)-1
-            # iterM = -1
-            # for iterM in range(len(fitsObject.workingDataValues3)):
-            #     debugging_lambda = fitsObject.workingLambdaValues[iterM]
-            #     debugging_value  = math.fabs(fitsObject.workingDataValues3[iterM])
-            #     if debugging_lambda < _start_:
-            #         continue
-            #     if debugging_value > max:
-            #         max = math.fabs(fitsObject.workingDataValues3[iterM]) 
-            #         iterMax = iterM
-            #     if ((nstars == 1 and debugging_lambda > _end_) or (nstars > 1 and debugging_lambda > (self.ldoObs+self.ldoObs2)/2)):
-            #         break
-            # debugging_lambda = fitsObject.workingLambdaValues[iterMax]
-            # debugging_value  = fitsObject.workingDataValues3[iterMax]
-            
-            # max = -1
-
         elif nstars == 2:
             # for debugging purposes
             mask = (workingLambdas >= self.ldoObs - delta1) & (workingLambdas <= self.ldoObs + delta1)
@@ -960,28 +940,8 @@ class lambdaData(object):
             abs_max_flux   = fluxes_region[abs_max_idx]
             debugging_lambda, debugging_value, _ = self.find_local_max(workingLambdas, workingfluxes, self.ldoObs, delta1, order = 2, abs_max = abs_max_lambda)
             
-            
-            # _start_ = factorStart*self.ldoObs2
-            # _end_   = factorEnd*self.ldoObs2
-            # delta2 = _end_ -self.ldoObs2
-            # debugging_lambda_arr, debugging_value_arr, _ = self.find_local_max(fitsObject.workingLambdaValues, fitsObject.workingDataValues3, self.ldoObs2, math.fabs(_start_-self.ldoObs2))
-            
             self.ldoObs    = abs_max_lambda
             self.ldoObs2   = debugging_lambda
-
-            # for iterM2 in range(len(fitsObject.workingDataValues3)):
-            #     if fitsObject.workingLambdaValues[iterM2] < _start_:
-            #         continue
-            #     if math.fabs(fitsObject.workingDataValues3[iterM2]) > max:
-            #         # print(fitsObject.workingLambdaValues[iterM])
-            #         max = math.fabs(fitsObject.workingDataValues3[iterM2]) 
-            #         iterMax2 = iterM2
-            #     if fitsObject.workingLambdaValues[iterM2] > _end_:
-            #         break
-            #     debugging_lambda = fitsObject.workingLambdaValues[iterM2]
-            # self.ldoObs  = fitsObject.workingLambdaValues[iterMax]
-            # self.ldoObs2 = fitsObject.workingLambdaValues[iterMax2]
-
 
         return self.ldoObs, abs_max_flux, _start_, _end_, self.ldoObs2, debugging_value
 
@@ -997,42 +957,6 @@ class lambdaData(object):
     def combined_model_gaussian(self, x, amp1, mean1, sigma1, amp2, mean2, sigma2):
         return (self.gaussian(x, amp1, mean1, sigma1) + self.gaussian(x, amp2, mean2, sigma2))
     
-    def paint_diff(self, xdata, ydata, summ_up, popt):
-        
-        from scipy.integrate import simps, quad
-        # Datos y modelo
-        amp1_fitted, mean1_fitted, gamma1_fitted, amp2_fitted, mean2_fitted, gamma2_fitted = popt
-        x_fit = np.linspace(xdata[0], xdata[-1], len(summ_up))
-        y_fit = self.combined_model_lorentzian(x_fit, *popt) + 1.0
-
-        # Integral de los datos
-        int_data = simps(ydata, xdata)
-
-        # Integral del modelo
-        int_model = quad(lambda x: self.combined_model_lorentzian(x, *popt) + 1, xdata[0], xdata[-1])[0]
-
-        # Gráfico
-        g = plt.figure(figsize=(10, 5), dpi=150)
-
-        # Área bajo la curva de los datos
-        plt.fill_between(xdata, ydata, alpha=0.4, label=f"Datos (Área = {int_data:.2f})")
-
-        # Área bajo la curva del modelo
-        plt.fill_between(x_fit, y_fit, alpha=0.4, label=f"Modelo (Área = {int_model:.2f})")
-
-        # Curvas
-        plt.plot(xdata, ydata, 'o', label="Datos", color='black')
-        plt.plot(x_fit, y_fit, '-', label="Modelo ajustado", color='red')
-
-        plt.xlabel("x")
-        plt.ylabel("y")
-        plt.title("Comparación de áreas bajo la curva")
-        plt.legend()
-        plt.grid(True)
-        plt.tight_layout()
-        plt.show()
-
-
     def CalculateEW(self,fitsObject, fitsobject2 = None, initial_weight = 0.0, initial_weight2 = 0.0, nstar = 1):
         
         from scipy.integrate import simps, quad
@@ -1041,7 +965,6 @@ class lambdaData(object):
         fLambdaValues = cpy.copy(fitsObject.workingLambdaValues[self.start:self.end])
         deltaLambda = fLambdaValues[len(fDataValues)-1] - fLambdaValues[0]
         print (len(fDataValues), self.start, self.end)
-        # print("len(fLambdaValues)=", len(fLambdaValues))
         if nstar == 1:
             for it in range(len(fDataValues)):
                 fDataValues[it] = fDataValues[it] + 1.0
@@ -1080,10 +1003,8 @@ class lambdaData(object):
                 # Generate individual spectra
                 star1_spectrum = self.lorentzian(fLambdaValues, amp1_fitted, mean1_fitted, gamma1_fitted)
                 # star1_spectrum = self.gaussian(fLambdaValues, amp1_fitted, mean1_fitted, gamma1_fitted)
-                # print("len(star1_spectrum) = ", len(star1_spectrum))
+                
                 star2_spectrum = self.lorentzian(fLambdaValues, amp2_fitted, mean2_fitted, gamma2_fitted)
-                # star2_spectrum = self.gaussian(fLambdaValues, amp2_fitted, mean2_fitted, gamma2_fitted)
-                # print("len(star2_spectrum) = ", len(star1_spectrum))
                 
                 star1_spectrum_trapz  = []
                 star2_spectrum_trapz  = []
@@ -1097,7 +1018,6 @@ class lambdaData(object):
                     fDataValues[it] = fDataValues[it] + 1.0
 
                 ### Calculation of the error ##############################################################
-                # self.paint_diff (fLambdaValues, fDataValues, summ_up, popt)
                 int_data = simps(fDataValues, fLambdaValues) # Integral of the original data 
                 int_model1 = quad(lambda x: self.combined_model_lorentzian(x, *popt) + 1.0, fLambdaValues[0], fLambdaValues[-1])[0]# Integral of the adjusted model
                 int_model2 = simps(summ_up_trapz,fLambdaValues)
@@ -1210,8 +1130,4 @@ class blackBody(object):
         f = C1/ (inputLambda**5 * (math.exp(C2/inputLambda/teff)-1))
         return f
     #######################################################################
-
-    
-# lambda_air = 10830.2501
-# print(lambda_vac, convertAirToVacuum(lambda_air))
 
