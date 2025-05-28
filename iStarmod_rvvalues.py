@@ -25,7 +25,7 @@ class RVValues():
         for iter in self.values:
             if (math.fabs(mjd-iter[0]) < 0.01):
                 print(mjd, iter[0])
-                print ("##############################################################################    Iter: ", iter[0])
+                print ("####################################    Iter: ", iter[0])
                 return iter
         return None
         
@@ -60,7 +60,7 @@ class RVValues():
         subPlot1.plot(time[4:], RV_kmday[4:], 'r*')
         
         subPlot2.plot(freq, periodogram)
-        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ", len(self.values))        
+        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ", len(self.values))        
         plt.show()
         
         
