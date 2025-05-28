@@ -60,7 +60,7 @@ As noted, the command starmod("filename.sm") must be executed from the same dire
 
 
 
-from istarmod_automat_reloaded import *
+	from istarmod_automat_reloaded import *
 
-starmod("pwand_n3_cah_34_wvl.sm")
+	starmod("pwand_n3_cah_34_wvl.sm")
 
