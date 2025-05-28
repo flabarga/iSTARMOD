@@ -42,7 +42,7 @@ TER_NAME =  NONE                # tertiary name: name/NONE
    TER_ROT  =                   # doppler broadening: float, keyword (var/fix)
    TER_WGT  =                   # weight: float, keyword (var/fix)
 
-###### SPECTRA FOPRMAT
+###### SPECTRA FORMAT
 MODE=  ech                      # spectra format if multidimensionnal: mult/ech
    APERTURE=  34                # aperture number : integer
    BAND=                        # band number : integer (UNUSED)
