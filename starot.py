@@ -5,7 +5,6 @@ import numpy as np
 #NEW###########
 from fshift import*
 #from scipy import signal 
-#from rotBroad import *
 #########################################################################
 ##-----------------------------------------------------------------------
 ##  This routine broadens a spectrum as a rotating star.
@@ -31,9 +30,8 @@ from fshift import*
  
 ##-----------------------------------------------------------------------
 ##-----------------------------------------------------------------------
-def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
+def starot (ndata, ydata, vsini, midLambda, refinc):
     
-    #print ndata
     #Initialising lists in order to allow their use as arrays à la FORTRAN
     order = []
     for i in range (ndata):
@@ -60,8 +58,7 @@ def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
     
     npix =int(pix + 0.5)
     frac = (pix + 0.5) - float (npix)
-    #print "pix, npix = ", pix, npix
-
+    
     ##  Broadening function stuff
     eps = 0.6                                   #Gray parameter for Linear Limb Darkening Law
     cd = math.pi * dlm * (1.0 - (eps / 3.0))
@@ -69,7 +66,7 @@ def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
     c2 = 0.5 * math.pi * eps / cd
 
     ##  CALCULATE GRAY PROFILE.
-    ##
+    
     ##  Central pixel
     #dl1 = 0.0
     #tmp1 = 1.0
@@ -86,9 +83,9 @@ def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
 
     phi[0] = phi[0] / 20.0
     norm = phi[0]
-    #print "phi[",0,"] = ", phi[0]
-    #print
-    ##  Whole pixels
+
+ 
+  ##  Whole pixels
     
     for i in range(1, npix):
         phi[i] = 0.0
@@ -102,11 +99,8 @@ def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
             #tmp1 = tmp2
             phi1 = phi2
         norm = norm + phi[i]
-        #print "phi[",i,"] = ", phi[i]
-    #print
-
+    
     ##  Partial pixel (remaining)
-    #npix += 1
     phi [npix] = 0.0
     for j in range(-9,11,1):
         dl2 = float (npix) + float (j) / 20.0
@@ -118,25 +112,19 @@ def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
             #tmp1 = tmp2
             phi1 = phi2
     norm = norm + phi[npix]
-    #print "phi[",npix,"] = ", phi[npix]
-    #print
     m = npix * 2 + 1
     ## Wrap-around for FFT
 
     for i in range(npix+1, m):
         phi[i]  = phi[m-i]
         norm = norm + phi[i]
-        #print "phi[",i,"] = ", phi[i]
-    #print
     
-    ############NEW LINES###########
+    #######################
     ## The Gray profile is halved so, we need to provide the other half of the line
     q = m+npix+1
     for i in range(m, q):
         phi[i]   = phi[i-m]
         phi[i-m] = 0.0
-        #print "phi[",i,"] = ", phi[i]
-    #print
     for i in range(q):
         phi[i] = phi[i+npix+1]
         phi[i+npix+1] = 0.0
@@ -147,22 +135,10 @@ def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
     for i in range(m):
         phi[i] = phi[i] / norm
     
-    #midp = len(phi)/2
-    #for i in range(m):
-    #    phi[i],phi[midp-m+i] = swap(phi[i],phi[midp-m+i])
-        
-    #print phi
     ## Do the FFT convolution
-    ##
-    #ans = convlv (ydata, ndata, phi, m, 1)
     ans = np.convolve (ydata, phi, mode = 'full')
-    #ans = signal.convolve(ydata,phi, mode= "full")
-    #print "/////////////////////////////////////////////"
-    #print "phi = ", phi
-    #print len(order), len(ans), ndata, len(phi)
-    #print "/////////////////////////////////////////////"
     
-    ############NEW LINES###########
+    #######################
     # Resulting from the execution of the algorithm 
     # (applying np.convolve) 
     # is an spectrum[array] broadened, but shifted. 
@@ -173,209 +149,6 @@ def starot (ndata, ydata, vsini, midLambda, refinc): #, order):
     ################################
     
     for i in range(ndata):
-        #print phi[i]
         order[i] = ans[i]
 
-    return order # ,phi
-
-def swap(a,b):
-    temp = a
-    a = b; b = temp
-    return a,b
-    
-###############################################################################
-###############################################################################
-## ****************************************************************************
-## ** The following routines are from Numerical Recipes and python translated *
-## ****************************************************************************
-##              NOT USED
-##############################################################################
-def four1(data,nn,isign):
-    
-    n = 2*nn
-    j = 0
-    #print "n = ", n        
-    for i in range (0,n,2):
-        #print "j= ",j
-        if j > i:
-            tempr     = data[j]
-            tempi     = data[j+1]
-            data[j]   = data[i]
-            data[j+1] = data[i+1]
-            data[i]   = tempr
-            data[i+1] = tempi
-        m=n/2
-        while (m >= 2 and j > m):
-            j = j - m
-            m = m/2
-        j = j + m -1
-    mmax = 2
-    while (n > mmax):
-        istep = 2*mmax
-        theta = (2*math.pi)/(isign*mmax)
-        wpr   = -2.*math.sin(0.50*theta)**2
-        wpi   = math.sin(theta)
-        wr    = 1.0000000000
-        wi    = 0.0000000000
-        for m in range(0,mmax,2):
-            for i in range(m,n,istep):
-                j=i+mmax
-                #print "j=",j
-                if j<len(data)-1:
-                    tempr = float(wr)*data[j] - float(wi)*data[j+1]                                                                                    
-                    tempi = float(wr)*data[j+1] + float(wi)*data[j]                                                                          
-                    data[j]   = data[i]   - tempr
-                    data[j+1] = data[i+1] - tempi
-                    data[i]   = data[i]   + tempr
-                    data[i+1] = data[i+1] + tempi
-            wtemp = wr
-            wr    = wr*wpr - wi*wpi + wr
-            wi    = wi*wpr + wtemp*wpi + wi
-        mmax = istep
-    return
-
-##############################################################################
-##############################################################################
-
-def twofft(data1,data2,n):
-    
-    #Initialising lists in order to allow their use as arrays à la FORTRAN
-    fft1 = []
-    fft2 = []
-
-    c1 = complex(0.5, 0.0)
-    c2 = complex(0.0, -0.5)
-    
-    ##Accessing dataX[j] in the usual way
-    ##Initialising the arrays fft1 & fft2
-    for j in range(n-1):#        do j=1,n
-        fft1.append(complex(data1[j],data2[j]))
-        fft2.append(complex(0.,0.))
-        
-    four1(fft1,n/2,1)
-    fft2[0] = complex(fft1[0].imag,0.0)
-    fft1[0] = complex(fft1[0].real,0.0)
-    n2 = n/2+2
-    for j in range(1,(n/2), 1):
-        h1 = c1*(fft1[j] + fft1[n2-j].conjugate())
-        h2 = c2*(fft1[j] - fft1[n2-j].conjugate())
-        fft1[j]      = h1
-        fft1[n2-j-2] = h1.conjugate()
-        fft2[j]      = h2
-        fft2[n2-j-2] = h2.conjugate()
-        
-    return fft1, fft2
-#
-
-##############################################################################
-##############################################################################
-
-def realft(data,n,isign):
-    
-    theta = math.pi/float(n)
-    c1    = 0.5
-    if (isign == 1):
-        c2 = -0.5
-        four1(data,n,+1)
-    else:
-        c2 = 0.5
-        theta = -theta
-
-    wpr  = -2.0*math.sin(0.5*theta)**2
-    wpi  = math.sin(theta)
-    wr   = 1.0 + wpr
-    wi   = wpi
-    n2p3 = 2*n+1
-    
-    for i in range(0,n/2):
-        i1  = 2*i
-        i2  = i1 + 1
-        i3  = n2p3 - i2
-        i4  = i3 + 1
-        wrs = float(wr)
-        wis = float(wi)
-        h1r =  c1*(data[i1]  + data[i3])
-        h1i =  c1*(data[i2]  - data[i4])
-        h2r = -c2*(data[i2]  + data[i4])
-        h2i =  c2*(data[i1]  - data[i3])
-        data[i1] =  h1r + wrs*h2r - wis*h2i
-        data[i2] =  h1i + wrs*h2i + wis*h2r
-        data[i3] =  h1r - wrs*h2r + wis*h2i
-        data[i4] = -h1i + wrs*h2i + wis*h2r
-        wtemp = wr
-        wr    = wr*wpr - wi*wpi+wr
-        wi    = wi*wpr + wtemp*wpi + wi
-
-    if (isign == 1):
-        h1r     = data[1]
-        data[1] = data[2] + h1r
-        data[2] = data[2] - h1r
-    else:
-        h1r     = data[1]
-        data[1] = c1*(h1r + data[2])
-        data[2] = c1*(h1r - data[2])
-        four1(data,n,-1)
-#   endif
-    return data
-    
-##############################################################################
-##############################################################################
-
-def convlv(data,n,respns,m,isign):
-    
-    NMAX = 4096            
-    #Initialising the list allow us to use them as arrays à la FORTRAN
-    fft = []
-    for i in range (NMAX):
-        fft.append(complex(0.0))
-    ans = []
-    for i in range (n):
-        ans.append(complex(0.0))
-
-    for i in range(0, int(math.floor((m-1)/2))-1):
-        #print "i in convolve: ", i, "and n-i:", n-i, "also, m-i: ", m-i
-        respns[n-i-1] = respns[m-i-1]
-
-    for i in range((m+3)/2, n-(m-1)/2):
-        respns[i] = 0.0
-
-    #print "input parameters passed to convolve are (n):", n, "(m): ", m 
-    fft, ans = twofft(data,respns,n) #twofft(data,respns,fft,ans,n)
-    no2 = n/2
-
-    for i in range(0,no2):
-        if (isign == 1):
-            ans[i] = fft[i]*ans[i]/no2
-        elif (isign == -1):
-            if (math.fabs(ans[i]) == 0.0):
-                #print 'deconvolving at resp=0'
-                break
-            ans[i] = fft[i]/ans[i]/no2
-        else:
-            #print 'no meaning for isign'
-            break
-
-    ans[0] = complex(ans[0].real,ans[no2+1].real)
-    ans    = realft(ans,no2,-1)
-    
-    return ans
-#        END
-##
-#
-
-##############################################################################
-######################test code###############################################
-#a = complex(1.,2.)
-#print a.real
-#print a.imag 
-#print a
-##st = ""
-##st += str(a)
-##print st
-#b = a.conjugate()
-#print b
-#c = 2*a
-#d = b**2
-#print c
-#print d
-
+    return order
