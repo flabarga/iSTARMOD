@@ -1,43 +1,43 @@
-CaIIH :=		lambda = 3968.47	lambda_left = 3960.50	lambda_right = 3976.50  deltalambda = 1.0
-CaIIK :=		lambda = 3933.67	lambda_left = 3925.50	lambda_right = 3938.50  deltalambda = 1.25
-Hbeta :=    	lambda = 4861.32    lambda_left = 4860.82	lambda_right = 4862.82  deltalambda = 2.75
-HeD3 :=     	lambda = 5878.25 	lambda_left = 5872.75	lambda_right = 5882.75 	deltalambda = 3.5
-NaD2 :=     	lambda = 5890.78 	lambda_left = 5882.75 	lambda_right = 5908.25 	deltalambda = 2.5
-NaD1 :=     	lambda = 5898.56 	lambda_left = 5897.56 	lambda_right = 5908.25 	deltalambda = 2.5
-Halpha :=   	lambda = 6564.60 	lambda_left = 6554.60 	lambda_right = 6578.50 	deltalambda = 6.0
-CaIRT-a :=		lambda = 8498.35 	lambda_left = 8494.0 	lambda_right = 8505.00 	deltalambda = 4.50
-CaIRT-b := 		lambda = 8542.44 	lambda_left = 8538.5 	lambda_right = 8555.00 	deltalambda = 1.0
-CaIRT-c := 		lambda = 8664.52 	lambda_left = 8658.0 	lambda_right = 8670.00 	deltalambda = 1.0
-FeI8691 :=		lambda = 8691.01 	lambda_left = 8680.75 	lambda_right = 8701.25 	deltalambda = 2.5
-PaschenD :=     lambda = 10052.14   lambda_left = 10050.0	lambda_right = 10054.0	deltalambda = 0.5
-HeI10833 :=     lambda = 10833.31   lambda_left = 10821.74	lambda_right = 10874.7 	deltalambda = 3.0
-PaschenG :=     lambda = 10941.091	lambda_left = 10938.59	lambda_right = 10943.59	deltalambda = 2.5
-PaschenB :=     lambda = 12830.29	lambda_left = 12818.09	lambda_right = 12824.09	deltalambda = 2.2
-NaI12679 :=		lambda = 12681.00	lambda_left = 12676.57	lambda_right = 12681.70	deltalambda = 3.0
-NaI8195D1 := 	lambda = 8183.256 	lambda_left = 8179.256	lambda_right = 8187.256	deltalambda = 4.0
-NaI8195D2 := 	lambda = 8195.80 	lambda_left = 8199.80 	lambda_right = 8191.80 	deltalambda = 4.0 
-KI8390 := 		lambda = 8390.22	lambda_left = 8386.22	lambda_right = 8394.22	deltalambda = 4.0
-MnI5432 :=		lambda = 5431.05	lambda_left = 5428.35	lambda_right = 5432.35	deltalambda = 1.5 
-FeI_527100 :=   lambda = 5271.00	lambda_left = 5266.00   lambda_right = 5276.00 	deltalambda = 2.0
-FeI_527182 :=   lambda = 5271.82	lambda_left = 5270.0	lambda_right = 5274.0 	deltalambda = 0.4
-CrI_527750 :=   lambda = 5277.50	lambda_left = 5275.50   lambda_right = 5279.50 	deltalambda = 1.8  
-FeII_531809 :=  lambda = 5318.09    lambda_left = 5317	    lambda_right = 5319 	deltalambda = 0.8 
-FeI_532952 :=   lambda = 5329.52    lambda_left = 5325.0    lambda_right = 5335.0 	deltalambda = 1.3 
-FeI_533001 :=   lambda = 5330.01    lambda_left = 5317	    lambda_right = 5319 	deltalambda = 1.2 
-FeI_534251 :=   lambda = 5342.51    lambda_left = 5317.0    lambda_right = 5319.0 	deltalambda = 0.7
-FeI_537299 :=   lambda = 5372.99    lambda_left = 5370.0    lambda_right = 5375.0 	deltalambda = 3.0
-FeI_539863 :=   lambda = 5398.63    lambda_left = 5396.0    lambda_right = 5402.0 	deltalambda = 1.2
-FeI_540728 :=   lambda = 5407.28    lambda_left = 5405.0	lambda_right = 5409.0	deltalambda = 1.2
-FeI_543122 :=   lambda = 5431.22    lambda_left = 5430.22   lambda_right = 5435.22  deltalambda = 1.0
-FeI_543603 :=   lambda = 5436.03    lambda_left = 5414.0    lambda_right = 5416.0   deltalambda = 2.5
-FeI_544843 :=   lambda = 5448.43    lambda_left = 5414.0    lambda_right = 5416.0   deltalambda = 0.8
-FeI_545713 :=   lambda = 5457.13    lambda_left = 5449.0	lambda_right = 5451.0   deltalambda = 0.7
-FeI_522864 :=   lambda = 5228.64    lambda_left = 5225.0    lambda_right = 5230.0   deltalambda = 1.0 
-Ti_9691 :=      lambda = 9691.517   lambda_left = 17000.0	lambda_right = 17002.0	deltalambda = 1.5
-Ti_9773 :=      lambda = 9772.96    lambda_left = 17000.0	lambda_right = 17002.0	deltalambda = 1.5 
-Ti_9785 :=      lambda = 9785.983   lambda_left = 9850.0	lambda_right = 9852.0	deltalambda = 2.0
-Ti_9786 :=      lambda = 9786.273   lambda_left = 9850.0	lambda_right = 9852.0	deltalambda = 1.5
-Ti_9790 :=      lambda = 9790.354   lambda_left = 9850.0	lambda_right = 9852.0	deltalambda = 5.0 
-Ti_8384 :=      lambda = 8384.804   lambda_left = 8380.0	lambda_right = 8388.0	deltalambda = 1.5
-FeI_8470 :=     lambda = 8470.727   lambda_left = 9850.0	lambda_right = 9852.0	deltalambda = 1.5 
-FeI_8514 :=     lambda = 8516.439   lambda_left = 9850.0	lambda_right = 9852.0	deltalambda = 1.5
+CaIIH :=		lambda = 3968.47  deltalambda = 1.0
+CaIIK :=		lambda = 3933.67  deltalambda = 1.25
+Hbeta :=    	lambda = 4861.32  deltalambda = 2.75
+HeD3 :=     	lambda = 5878.25  deltalambda = 3.5
+NaD2 :=     	lambda = 5890.78  deltalambda = 2.5
+NaD1 :=     	lambda = 5898.56  deltalambda = 2.5
+Halpha :=   	lambda = 6564.60  deltalambda = 6.0
+CaIRT-a :=		lambda = 8498.35  deltalambda = 4.50
+CaIRT-b := 		lambda = 8542.44  deltalambda = 1.0
+CaIRT-c := 		lambda = 8664.52  deltalambda = 1.0
+FeI8691 :=		lambda = 8691.01  deltalambda = 2.5
+PaschenD :=     lambda = 10052.14  deltalambda = 0.5
+HeI10833 :=     lambda = 10833.31  deltalambda = 3.0
+PaschenG :=     lambda = 10941.091  deltalambda = 2.5
+PaschenB :=     lambda = 12830.29  deltalambda = 2.2
+NaI12679 :=		lambda = 12681.00  deltalambda = 3.0
+NaI8195D1 := 	lambda = 8183.256  deltalambda = 4.0
+NaI8195D2 := 	lambda = 8195.80 	deltalambda = 4.0 
+KI8390 := 		lambda = 8390.22  deltalambda = 4.0
+MnI5432 :=		lambda = 5431.05  deltalambda = 1.5 
+FeI_527100 :=   lambda = 5271.00  deltalambda = 2.0
+FeI_527182 :=   lambda = 5271.82  deltalambda = 0.4
+CrI_527750 :=   lambda = 5277.50  deltalambda = 1.8  
+FeII_531809 :=  lambda = 5318.09  deltalambda = 0.8 
+FeI_532952 :=   lambda = 5329.52  deltalambda = 1.3 
+FeI_533001 :=   lambda = 5330.01  deltalambda = 1.2 
+FeI_534251 :=   lambda = 5342.51  deltalambda = 0.7
+FeI_537299 :=   lambda = 5372.99  deltalambda = 3.0
+FeI_539863 :=   lambda = 5398.63  deltalambda = 1.2
+FeI_540728 :=   lambda = 5407.28  deltalambda = 1.2
+FeI_543122 :=   lambda = 5431.22  deltalambda = 1.0
+FeI_543603 :=   lambda = 5436.03  deltalambda = 2.5
+FeI_544843 :=   lambda = 5448.43  deltalambda = 0.8
+FeI_545713 :=   lambda = 5457.13  deltalambda = 0.7
+FeI_522864 :=   lambda = 5228.64  deltalambda = 1.0 
+Ti_9691 :=      lambda = 9691.517  deltalambda = 1.5
+Ti_9773 :=      lambda = 9772.96  deltalambda = 1.5 
+Ti_9785 :=      lambda = 9785.983  deltalambda = 2.0
+Ti_9786 :=      lambda = 9786.273  deltalambda = 1.5
+Ti_9790 :=      lambda = 9790.354  deltalambda = 5.0 
+Ti_8384 :=      lambda = 8384.804  deltalambda = 1.5
+FeI_8470 :=     lambda = 8470.727  deltalambda = 1.5 
+FeI_8514 :=     lambda = 8516.439  deltalambda = 1.5
