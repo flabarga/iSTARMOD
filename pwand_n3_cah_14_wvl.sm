@@ -4,8 +4,8 @@
 ###### The syntax is 'KEYWORD = value' with one statement per line
 
 ###### GENERAL INFORMATION
-IM_PATH  = .\EstrellasFrias\Activas\PWAnd\VIS\  # path of fits spectra (optional)
-OBJ_NAME = npwand_n3.fits                       # object name
+IM_PATH  = .\  			# path of fits spectra (optional)
+OBJ_NAME = npwand_n3.fits       # object name
 
 ###### OUTPUT SPECTRA
 SYN_SPEC = YES                 # write output spectra: YES/NO
@@ -14,21 +14,21 @@ SYN_SPEC = YES                 # write output spectra: YES/NO
 
 
 ###### INTERPOLATION PARAMETERS
-N_ITER = 20                      # iteration number: integer
+N_ITER = 8                      # iteration number: integer
 PIX_ZONE = 8460 8530  wvl       # pixel range for the fit: 2 integers
 PIX_EXCL = 8460 8460  wvl       # 'BLUE EXCLUSION ZONE'	 skip pixel subrange: 2 integers (optional)
-PIX_EXCL = 8492 8502  wvl       # NaD1-D2 LINE ZONE     # skip pixel subrange: 2 integers (optional)
-PIX_EXCL = 						# 6551 6553  wvl       # skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
-PIX_EXCL = 						# 6551 6553  wvl       # skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
-PIX_EXCL =					    # skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
+PIX_EXCL = 8492 8502  wvl       # NaD1-D2 ZONE    	 skip pixel subrange: 2 integers (optional)
+PIX_EXCL = 			# skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
+PIX_EXCL = 			# skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
+PIX_EXCL =			# skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
 
 
 ###### PRIMARY STAR
-REF_PATH = .\Estrellasfrias\Ref\nhd166620\  # path for fits spectre
+REF_PATH = .\  # path for fits spectre
 PRM_NAME = nhd166620_n2.fits    # primary name
 PRM_RAD  = -20.00 var           # doppler shift: float, keyword (var/fix)
-PRM_ROT  = 22.521 fix             # doppler broadening: float, keyword (var/fix)
-PRM_WGT  = 1.0 var              # weight: float, keyword (var/fix)
+PRM_ROT  = 22.521 var             # doppler broadening: float, keyword (var/fix)
+PRM_WGT  = 1.0 fix              # weight: float, keyword (var/fix)
 
 
 ###### SECONDARY STAR
@@ -45,14 +45,14 @@ TER_NAME =  NONE                # tertiary name: name/NONE
 
 ###### SPECTRA FOPRMAT
 MODE=  ech                      # spectra format if multidimensionnal: mult/ech
-   APERTURE=  14                 # aperture number : integer
-   BAND=                        # band number : integer (optional)
-   LINE= CaIRT-a					# To specify the LINE in order to evaluate the EW
-								# The definition must be compliant with the specification of
-								# the config. file "lambdas.dat"
+   APERTURE=  14                # aperture number : integer
+   BAND=                        # band number : integer (UNUSED)
+   LINE= CaIRT-a		# To specify the LINE in order to evaluate the EW
+					# The definition must be compliant with the specification of
+					# the config. file "lambdas.dat"
 ###### ALGORITHM & VISUALISATION PARAMS
 MAXFLUXDISP_OBJ = 1.75 			# Max. flux to display in the object+ref spectra window
 MAXFLUXDISP_SUB = 0.75 			# Max. flux to display in the subtracted spectrum window
-FINDMAX_TOLERANCE = 0.0005		# to find the maximum of the subtracted spectra @ calculating the integral 
-################################# FIN #########################################
+FINDMAX_TOLERANCE = 0.001		# to find the maximum of the subtracted spectra @ calculating the integral 
+################################# END #########################################
 
