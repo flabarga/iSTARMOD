@@ -59,6 +59,8 @@ Once all parameters are set, execution begins. This generates the synthetic and 
 As noted, the command starmod("filename.sm") must be executed from the same directory where the executable is located. From the files included here:
 
 
+
 from istarmod_automat_reloaded import *
+
 starmod("pwand_n3_cah_34_wvl.sm")
 
