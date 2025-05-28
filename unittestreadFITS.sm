@@ -1,0 +1,53 @@
+######################### INPUT FILE FOR fstarmod #############################
+
+###### A '#' begins a comment till the end of the line
+###### The syntax is 'KEYWORD = value' with one statement per line
+
+###### GENERAL INFORMATION
+IM_PATH  = .\\  # path of fits spectra (optional)
+OBJ_NAME = npwand_n3.fits                       # object name
+
+###### OUTPUT SPECTRA
+SYN_SPEC = YES                 # write output spectra: YES/NO
+   SYN_NAME = carmenesunittest1synth.fits # synthetised spectrum name
+   SUB_NAME = carmenesunittest1subst.fits # substracted spectrum name (if SYN_SPEC =YES) 
+
+
+###### INTERPOLATION PARAMETERS
+N_ITER = 4                      # iteration number: integer
+PIX_ZONE = 3750 8710  wvl       # pixel range for the fit: 2 integers
+PIX_EXCL =  					# 6530 6540  wvl       # 'BLUE EXCLUSION ZONE'	skip pixel subrange: 2 integers (optional)
+PIX_EXCL =  				    # 6550 6570  wvl 		H ALPHA ZONE		skip pixel subrange: 2 integers (optional)
+PIX_EXCL =   					# skip pixel subrange: 2 integers (optional)
+PIX_EXCL =                      # skip pixel subrange: 2 integers (optional)
+
+
+###### PRIMARY STAR
+REF_PATH = .\	# path of fits spectra (optional)
+PRM_NAME = 												# primary name "espectro CARMENES original"
+PRM_RAD  = -33.5 var            						# doppler shift: float, keyword (var/fix)
+PRM_ROT  = 0.01 var	            						# doppler broadening: float, keyword (var/fix)
+PRM_WGT  = 1 fix                						# weight: float, keyword (var/fix)
+
+
+###### SECONDARY STAR
+SEC_NAME =  NONE                # secondary name: name/NONE
+   SEC_RAD  =                   # doppler shift: float; 
+   SEC_ROT  =                   # doppler broadening: float; 
+   SEC_WGT  =                   # weight: float, keyword (var/fix)
+
+###### TERTIARY STAR
+TER_NAME =  NONE                # tertiary name: name/NONE
+   TER_RAD  =                   # doppler shift: float, keyword (var/fix)
+   TER_ROT  =                   # doppler broadening: float, keyword (var/fix)
+   TER_WGT  =                   # weight: float, keyword (var/fix)
+
+###### SPECTRA FOPRMAT
+MODE=  ech                      # spectra format if multidimensionnal: mult/ech
+   APERTURE=  64                # aperture number : integer
+   BAND=                        # band number : integer (optional)
+   LINE= Hbeta 					# To specify the LINE in order to evaluate the EW
+								# The definition must be compliant with the specification of
+								# the config. file "lambdas.dat"
+################################# FIN #########################################
+
