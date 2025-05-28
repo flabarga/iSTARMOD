@@ -3,8 +3,6 @@
 #
 #  Name:     fshift
 #  Filename: fshift.py
-#  Type:     subroutine.
-#
 #  Language: Python
 #  Purpose:  Shift a data array by a non-integral amount.
 #
@@ -14,14 +12,14 @@
 #                  shft (input) = shift value.
 #                  yout (output) = shifted data array.
 #
-#  In#lude files: none.
 #  Subroutines/libraries: ishift (npts,x,ishft,y) 
 #                         interp (x,y,npts,nterms,xin,yout)  
 #
 #  Author: S. Barden   
 #  Date:      nov 84
 #  Modified: 
-#
+#  Author: Fernando Labarga 
+#  Date       2016     Migrated to Python
 ########################################################################
 
 import math
@@ -46,7 +44,7 @@ def ishift (npts,x,ishft):
 def fshift (npts,xin,shft):
     
 #-----------------------------------------------------------------------
-    #In order to assign the list elements à la FORTRAN, we must initialise the lists
+    #To assign the list elements à la FORTRAN, we must initialise the lists
     yout = []
     for i in range(npts):
         yout.append(0.0)
@@ -74,15 +72,12 @@ def fshift (npts,xin,shft):
     if (fshft == 0.0 ):
         for i in range(npts):
             yout[i] = t[i]
-
     else:
         for i in range(npts):
             p[i] = float(i)
         #interpolate = interpl.interp1d(p,t, "linear")
         for i in range(1,npts-1):
-        #for i in range(npts-1):
             xinpt = float(i) - fshft
-            #yout[i] = interpolate(xinpt)
             if (i-2 <= 0):
                 ty[0] = 1000.0
                 px[0] = -1.0
@@ -114,6 +109,4 @@ def fshift (npts,xin,shft):
         yout[0]  = yout[1]
         yout[-1] = yout[len(yout)-2]
     return yout
-#-----------------------------------------------------------------------
-#end
 
