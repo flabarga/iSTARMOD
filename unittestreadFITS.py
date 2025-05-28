@@ -759,10 +759,5 @@ def unittestreadFITS(spcfFile):
     if inputObject.fits_hdu_in != None:
         inputObject.fits_hdu_in.close()
 
-# unittestreadFITS("CARMENES03_refstacked_Halpha.sm")
+
 unittestreadFITS("unittestreadFITS.sm")
-#unittestreadFITS("unittestsCARMENES2.sm")
-#unittestreadFITS("subpwand_n3_ha.sm")
-#unittestreadFITS("unittestsCARMENES3.sm")
-#unittestreadFITS("unittestsCARMENES4.sm")
-# unittestreadFITS("CARMENES00_PaschenB_NIR_readtellurics.sm")
