@@ -791,10 +791,17 @@ class lambdaData(object):
                 end = line.find(':=') -1
                 key = line[:end]
                 start1 = line.find("lambda = ") + 9
-                end1   = line.find("lambda_left") -1
-                data1 = float(line[start1:end1])
-                start2 = line.find("deltalambda =") + 13
-                data2 = float(line[start2:])
+                end1   = line.find("lambda_left")
+                # data1 = float(line[start1:end1])
+                # start2 = line.find("deltalambda =") + 13
+                if end1 == -1:
+                    end1 = line.find("deltalambda =")
+                    data1 = float(line[start1:end1-1])
+                    data2 = float(line[end1+13:])
+                else:
+                    start2 = line.find("deltalambda =") + 13
+                    data1 = float(line[start1:end1])
+                    data2 = float(line[start2:])
                 self.lambdaDataDict.update( {key :[data1,data2]})
             # print (str(self.lambdaDataDict))
         return self.lambdaDataDict
