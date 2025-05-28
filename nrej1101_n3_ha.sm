@@ -1,0 +1,56 @@
+######################### INPUT FILE FOR fstarmod #############################
+
+###### A '#' begins a comment till the end of the line
+###### The syntax is 'KEYWORD = value' with one statement per line
+
+###### GENERAL INFORMATION
+IM_PATH  = .\EstrellasFrias\Activas\nrej1101\vis\    # path of fits spectra (optional)
+OBJ_NAME = nrej1101_foces02_n2.fits  # object name
+
+###### OUTPUT SPECTRA
+SYN_SPEC = YES                        # write output spectra: YESaaO
+   SYN_NAME = syfoces_binary_ha_HDV.fits  # synthetised spectrum name
+   SUB_NAME = sufoces_binary_ha_HDV.fits  # substracted spectrum name (if SYN_SPEC =YES) a
+
+###### INTERPOLATION PARAMETERS
+N_ITER =  8                      # iteration number: integer
+PIX_ZONE = 6515 6595  wvl        # pixel range for the fit: 2 integers
+PIX_EXCL = 6515	6520  wvl        # BLUE EXCLUSION ZONE skip pixel subrange: 2 integers (optional)
+PIX_EXCL = 6550 6575  wvl        # HALPHA EXCLUSION ZONEskip pixel subrange: 2 integers (optional)
+PIX_EXCL =                       # skip pixel subrange: 2 integers (optional)
+PIX_EXCL =                       # skip pixel subrange: 2 integers (optional)
+PIX_EXCL =                       # skip pixel subrange: 2 integers (optional)
+
+
+###### PRIMARY STAR
+REF_PATH = .\EstrellasFrias\Ref\nhd92588\		# path of fits spectrum of star of reference
+PRM_NAME = nhd92588_n2.fits         # primary name
+	PRM_RAD  = 53.0 var                 # doppler shift: float, keyword (var/fix)
+	PRM_ROT  = 25.510 fix                  # doppler broadening: float, keyword (var/fix)
+	PRM_WGT  = 0.508 fix                    # weight: float, keyword (var/fix)
+                   
+                                             
+###### SECONDARY STAR
+SEC_PATH = .\EstrellasFrias\Ref\nhd97004\ # PATH OF FITS SPECTRUM FOR SECONDARY STAR OF REFERENCE
+SEC_NAME = nhd97004_n4.fits         # secondary name: name/NONE
+   SEC_RAD  = -80.2 var             # doppler shift: float; 
+   SEC_ROT  = 29.600 fix                  # doppler broadening: float; 
+   SEC_WGT  = 0.492 fix                 # weight: float, keyword (var/fix)
+
+###### TERTIARY STAR
+TER_NAME =     NONE                 # tertiary name: name/NONE
+   TER_RAD  =                       # doppler shift: float, keyword (var/fix)
+   TER_ROT  =                       # doppler broadening: float, keyword (var/fix)
+   TER_WGT  =                       # weight: float, keyword (var/fix)
+
+###### SPECTRA FOPRMAT
+MODE=  ech                          # spectra format if multidimensionnal: mult/ech
+   APERTURE= 34                     # aperture number : integer
+   BAND=                            # band number : integer (optional)
+   LINE= Halpha 					# Line Specification
+   
+###### ALGORITHM & VISUALISATION PARAMS
+MAXFLUXDISP_OBJ = 2. 			# Max. flux to display in the object+ref spectra window
+MAXFLUXDISP_SUB = 1. 			# Max. flux to display in the subtracted spectrum window
+FINDMAX_TOLERANCE = 0.001		# to find the maximum of the subtracted spectra @ calculating the integral 
+################################# FIN #########################################
