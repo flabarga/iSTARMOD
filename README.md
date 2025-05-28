@@ -28,12 +28,19 @@ starmod(file=filename.sm)
     o	Wavelenght range to consider
     o	Optionally, wavelength intervals to exclude (as shown in the example)
     o	Output filenames for the synthetic and subtracted spectra
+    
     o	Parameters for the primary and secondary stars separately, including:
+    
         - Reference star (of the same spectral type and luminosity class): filename of the fits file
+	
         - Radial velocity
+	
         - Projected rotational velocity (vsini)
+	
         - Spectral weight  
+	
         - Whether each parameter is fixed or variable during the iteration (denoted by *fix* or *var*)
+	
         - The aperture number (spectral order) is also included
         
 Once all parameters are set, execution begins. This generates the synthetic and subtracted spectra and prints the results of the iterations along with the final fit for both components.
