@@ -1,0 +1,58 @@
+######################### INPUT FILE FOR fstarmod #############################
+
+###### A '#' begins a comment till the end of the line
+###### The syntax is 'KEYWORD = value' with one statement per line
+
+###### GENERAL INFORMATION
+IM_PATH  = .\EstrellasFrias\Activas\PWAnd\VIS\  # path of fits spectra (optional)
+OBJ_NAME = npwand_n3.fits                       # object name
+
+###### OUTPUT SPECTRA
+SYN_SPEC = YES                 # write output spectra: YES/NO
+   SYN_NAME = synpwand_n3_cah_RML.fits # synthetised spectrum name
+   SUB_NAME = subpwand_n3_cah_RML.fits # substracted spectrum name (if SYN_SPEC =YES) 
+
+
+###### INTERPOLATION PARAMETERS
+N_ITER = 25                      # iteration number: integer
+PIX_ZONE = 4845 4900  wvl       # pixel range for the fit: 2 integers
+PIX_EXCL = 4845 4850  wvl       # 'BLUE EXCLUSION ZONE'	 skip pixel subrange: 2 integers (optional)
+PIX_EXCL = 4852 4868  wvl       # H BETA LINE ZONE     # skip pixel subrange: 2 integers (optional)
+PIX_EXCL = 						# 6551 6553  wvl       # skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
+PIX_EXCL = 						# 6551 6553  wvl       # skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
+PIX_EXCL =					    # skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
+
+
+###### PRIMARY STAR
+REF_PATH = .\Estrellasfrias\Ref\nhd166620\  # path for fits spectre
+PRM_NAME = nhd166620_n2.fits    # primary name
+PRM_RAD  = -10.00 var           # doppler shift: float, keyword (var/fix)
+PRM_ROT  = 5.00 var            # doppler broadening: float, keyword (var/fix)
+PRM_WGT  = 1.0 var              # weight: float, keyword (var/fix)
+
+
+###### SECONDARY STAR
+SEC_NAME =  NONE                # secondary name: name/NONE
+   SEC_RAD  =                   # doppler shift: float; 
+   SEC_ROT  =                   # doppler broadening: float; 
+   SEC_WGT  =                   # weight: float, keyword (var/fix)
+
+###### TERTIARY STAR
+TER_NAME =  NONE                # tertiary name: name/NONE
+   TER_RAD  =                   # doppler shift: float, keyword (var/fix)
+   TER_ROT  =                   # doppler broadening: float, keyword (var/fix)
+   TER_WGT  =                   # weight: float, keyword (var/fix)
+
+###### SPECTRA FOPRMAT
+MODE=  ech                      # spectra format if multidimensionnal: mult/ech
+   APERTURE=  64                 # aperture number : integer
+   BAND=                        # band number : integer (optional)
+   LINE= Hbeta					# To specify the LINE in order to evaluate the EW
+								# The definition must be compliant with the specification of
+								# the config. file "lambdas.dat"
+
+###### ALGORITHM & VISUALISATION PARAMS
+MAXFLUXDISP_OBJ = 2. 			# Max. flux to display in the object+ref spectra window
+MAXFLUXDISP_SUB = 1. 			# Max. flux to display in the subtracted spectrum window
+FINDMAX_TOLERANCE = 0.0006		# to find the maximum of the subtracted spectra @ calculating the integral 
+################################# FIN #########################################
