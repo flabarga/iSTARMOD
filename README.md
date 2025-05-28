@@ -4,16 +4,27 @@ python code implementing Spectral Subtraction Technique to study chromospheric a
 SPECTRAL SUBTRACTION TECHNIQUE
 
 Synthetic Spectrum:
+
   •	Reference star spectra:
+  
 	    Inactive (no emission in the activity indicator considered)
-    	Low projected rotational velocity (vsini)
+     
+    	    Low projected rotational velocity (vsini)
+	 
 	    Same effective temperature (Teff) and luminosity class
+     
   •	Doppler shift is applied
+  
   •	Rotational broadening (vsini)
+  
   •	Weighting based on the relative intensity in the Halpha and continuum regions for the primary and the secondary component
+  
 
 Subtracted Spectrum:
+
   •	Computed as: *Observed Spectrum – Synthetic Spectrum*, thus isolating the chromospheric contribution
+  
+
 
 iSTARMOD Program
 
