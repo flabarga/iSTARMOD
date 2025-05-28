@@ -803,7 +803,6 @@ class lambdaData(object):
                     data1 = float(line[start1:end1])
                     data2 = float(line[start2:])
                 self.lambdaDataDict.update( {key :[data1,data2]})
-            # print (str(self.lambdaDataDict))
         return self.lambdaDataDict
         
     def calculateDopplerDisplacement(self, vRad, nstar2 = False, vRad2 = 0.0):
