@@ -45,9 +45,9 @@ starmod(file=filename.sm)
 
   	o Output filenames for the synthetic and subtracted spectra
 
-   	o Parameters for the primary and secondary stars separately, including:
+   	o Parameters for the primary and (optionally) secondary stars separately, including:
     
-        	- Reference star (of the same spectral type and luminosity class): filename of the fits file
+        	- Reference star (of the same spectral type and luminosity class): filename of the fits file/s
 	
         	- Radial velocity
 	
