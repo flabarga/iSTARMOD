@@ -61,7 +61,7 @@ starmod(file=filename.sm)
         
 Once all parameters are set, execution begins. This generates the synthetic and subtracted spectra and prints the results of the iterations along with the final fit for both components.
 
-As noted, in the command starmod("filename.sm") the parameter "filename.sm" can specify the absolute or relative path to the executable. If the path is not specified the "filename.sm" input file must be found  in the same directory where the executable is located. As an example, from the files provided in this repository:
+As noted, in the command starmod("filename.sm") the parameter "filename.sm" can specify its absolute or relative path. If no path is specified the "filename.sm" input file must be found in the same directory where the executable is located. As an example, from the files provided in this repository:
 
 
 
