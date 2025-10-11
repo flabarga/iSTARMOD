@@ -1,9 +1,9 @@
 #=======================================================================
-## Name:     iSTARMOD_AUTOMAT_RELOADED
-# Filename: 
+## Name:     STARMOD
+# Filename: starmod.f
 # Type:     program
 ################################################################
-# Language: Python 3.4
+# Language: Python 2.7
 # Purpose:  Synthesize a composite spectrum from input templates and 
 #           object spectrum, outputs composite and residual spectrum.
 ################################################################
@@ -17,13 +17,34 @@
 # Modifications:    dph = David Huenemoerder     adw = Alan Welty
 # Migration to Python  Fernando Labarga 2017
 ################################################################
+#   xx-may-85  dph  Modified for CRDS 
+#                   File i/o changed to handle bmo format files.
+#   xx-jun-88  dph  sshft & tshft removed from read, forced to zero;
+#                   (allows iraf/unix file names of arbitrary length)
+#   xx-jul-88  dph  modified more to suit iraf:
+#                   file num may now be 4 digits
+#                   (i.e. syn1234, num from 1st line of input file);
+#                   '.dat' suffix dropped from filenames.
+#   03-nov-88  dph  read lines from iraf 2d echelle images.
+#                   Line numbers are now read after the filenames.
+#   28-jul-92  adw  Fixes for IRAF header format changes;
+#                   make code more readable; allow 1D and 2D data.
+#   12-aug-92  adw  Work out a few minor bugs; format output
+#   04-feb-93  adw  Minor tweaks to parm search; add output switch
+#   10-mar-93  adw  Put UT & DATE-OBS of object in output header
+#   21-jun-93  adw  New broadening subroutine ("starot" from "disk") 
+#                   and fix up broadening test loop
+#   04-jan-94  adw  Eliminate unused stuff.  Use new FFT starot.
+#   29-mar-94  adw  Fix data array setup logic.
+#   25-apr-94  adw  Final fixes for release to interested parties.
 #   15-feb-17  ffla Migration from FORTRAN code to python
-#              Correction of the features of the kernel/broadening function in starot
+#                   Correction of the features of the kernel/broadening function in starot
 ################################################################################################
 ################################################################################################
 
 import os 
 import matplotlib.pyplot as plt
+# import iStarmod_fits as fits_tools
 from iStarmod_fits import * 
 import iStarmod_tools as tools
 import support as supp
@@ -153,7 +174,11 @@ def starmod(spcfFile, debugging = False):
             # rv_outfile = open(filenameRV2, 'a')
             print ("outfilenameRV:" , filenameRV2)
     ############################################################################################################
-       
+    
+        
+    ##################################################################################3
+    ##################################################################################3
+    
     ##################################################################################3
     #READING and plotting THE OBJECT FITS FILE
     ##################################################################################3
@@ -818,7 +843,7 @@ def starmod(spcfFile, debugging = False):
             #             Write iteration results 
             #             to the standard output
             #####################################################
-            V_rot = int(inputParams.PRMRot[0]*1000)/1000       
+            # V_rot = int(inputParams.PRMRot[0]*1000)/1000       
             # print
             # print (' Results of iteration #' + str(niter+1))
             print (' Minimum RMS of the residuals = ' + str(math.sqrt (math.fabs(minssr) / inputParams.cnt)))
@@ -908,8 +933,11 @@ def starmod(spcfFile, debugging = False):
         if nstar == 1:
             if (rv_values_available == False):
                 rv_outfile = open(filenameRV1, 'a')
-                rv_outfile.write(str(inputObject.date) + " " + str(inputParams.PRMRad[0]) + '\n')
-                print ("#######################################################    outfilenameRV:" , filenameRV1)
+                if inputParams.linespcf != 'NONE':
+                    rv_outfile.write(str(inputObject.date) + " " + str(inputParams.PRMRad[0]) + '\n')
+                else:
+                    rv_outfile.write(str(inputObject.date) + " " + str(inputParams.PRMRad[0]) + " " + str(inputObject.BaryCorr) + '\n')
+                print ("##########################    outfilenameRV:" , filenameRV1)
                 rv_outfile.close()
         ##------------------------------------------------------------------------------##
 
@@ -949,6 +977,7 @@ def starmod(spcfFile, debugging = False):
                 print (lambdas.ldoObs, lambdas.ldoObs2)
                 if lambdas.ldoObs > lambdas.ldoObs2: #preparing for getMaximumValue
                     lambdas.ldoObs, lambdas.ldoObs2 = lambdas.ldoObs2 , lambdas.ldoObs
+                    ldoObs , ldoObs2 = ldoObs2 , ldoObs 
                 print (lambdas.ldoObs, lambdas.ldoObs2)
                 print (ldoObs, ldoObs2)
                 ldoObs, param2, param5, param6, ldoObs2 , param4 = lambdas.getMaximumValue(inputObject, lambdas.ldoObs, inputParams.FindMax_Tolerance, 2, lambdas.ldoObs2) # ldoObs is modified within getMaximumValues
@@ -1061,70 +1090,79 @@ def starmod(spcfFile, debugging = False):
         
         # # CaIIH&K
         if(inputParams.linespcf == "CaIIH" or inputParams.linespcf == "CaIIK"):
-            subPlot1.set_title("Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str(V_rot) + " km/s")
+            subPlot1.set_title("Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
             subPlot1.set_ylim(-1.0, inputParams.MaxFluxDisplayed_Sub)
-            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf)
+            subPlot2.set_title(inputObject.object + "@" + str(float('{:6.4f}'.format(dateTitle))) +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
             subPlot2.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Obj)
             # subPlot1.set_xlim(3945,3985)
             # subPlot2.set_xlim(3945,3985)
         # # Hbeta
-        if(inputParams.linespcf == "Hbeta"):
-            subPlot1.set_title("Subtracted Spectrum for "+ "$H\beta$" + r" / $v_{\rm rot}sini$ = " + str(V_rot) + " km/s")
+        elif(inputParams.linespcf == "Hbeta"):
+            subPlot1.set_title("Subtracted Spectrum for "+ r"$H\beta$" + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
             subPlot1.set_ylim(-1.0, inputParams.MaxFluxDisplayed_Sub)
-            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + r"$H\beta$")
+            subPlot2.set_title(inputObject.object + "@" + str(float('{:6.4f}'.format(dateTitle))) + "  &  Synthetic Spectra for " + r"$H\beta$", font = 'serif', size= 18)
             subPlot2.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Obj)
-            subPlot1.set_xlim(4847.5,4872.5)
-            subPlot2.set_xlim(4847.5,4872.5)
+            subPlot1.set_xlim(4850,4890)
+            subPlot2.set_xlim(4850,4890)
             # print ("Here in Hbeta!!")
         # # HeD3 NaD2/NaD1
-        if(inputParams.linespcf == 'HeD3' or inputParams.linespcf == 'NaD2' or inputParams.linespcf == 'NaD1'):
-            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str(V_rot) + " km/s")
+        elif(inputParams.linespcf == 'HeD3' or inputParams.linespcf == 'NaD2' or inputParams.linespcf == 'NaD1'):
+            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
             subPlot1.set_ylim(-0.25, inputParams.MaxFluxDisplayed_Sub)
-            subPlot2.set_title(inputObject.object + "@" + str(float('{:6.5f}'.format(dateTitle))) +"  &  Synthetic Spectra for " + inputParams.linespcf)
-            subPlot2.set_ylim(-0.2, inputParams.MaxFluxDisplayed_Obj)
+            subPlot2.set_title(inputObject.object + "@" + str(float('{:6.5f}'.format(dateTitle))) + "  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
+            subPlot2.set_ylim(0., inputParams.MaxFluxDisplayed_Obj)
             subPlot1.set_xlim(5860,5910)
             subPlot2.set_xlim(5860,5910)
         # # Halpha
         elif(inputParams.linespcf == 'Halpha'):
-            subPlot1.set_title(r"Subtracted Spectrum for "+ r"$H\alpha$" + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s")
-            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + r"$H\alpha$")
+            subPlot1.set_title(r"Subtracted Spectrum for "+ r"$H\alpha$" + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
+            subPlot2.set_title(inputObject.object + "@" + str(float('{:6.5f}'.format(dateTitle))) + "  &  Synthetic Spectra for " + r"$H\alpha$", font = 'serif', size= 18)
             subPlot2.set_ylim(0.0, inputParams.MaxFluxDisplayed_Obj)
             subPlot1.set_ylim(-1.0, inputParams.MaxFluxDisplayed_Sub)
-            subPlot1.set_xlim(6515,6605)
-            subPlot2.set_xlim(6515,6605)
+            subPlot1.set_xlim(6550,6580)
+            subPlot2.set_xlim(6550,6580)
         #  CaIRT-a
         elif(inputParams.linespcf == 'CaIRT-a'):
-            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str(V_rot) + " km/s")
-            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf)
+            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
+            subPlot2.set_title(inputObject.object + "@" + str(float('{:6.5f}'.format(dateTitle))) +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
+            subPlot1.set_ylim(-0.25, inputParams.MaxFluxDisplayed_Sub)
+            subPlot2.set_ylim(0.25,inputParams.MaxFluxDisplayed_Obj)
+            subPlot1.set_xlim(8465,8530)
+            subPlot2.set_xlim(8465,8530)
+        elif(inputParams.linespcf == 'CaIRT-c'):
+            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
+            subPlot2.set_title(inputObject.object + "@" + str(float('{:6.5f}'.format(dateTitle))) +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
             subPlot1.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Sub)
             subPlot2.set_ylim(0.,inputParams.MaxFluxDisplayed_Obj)
-            subPlot1.set_xlim(8460,8530)
-            subPlot2.set_xlim(8460,8530)
+            subPlot1.set_xlim(8600,8680)
+            subPlot2.set_xlim(8600,8680)
         # # #################### Paschen D
         elif(inputParams.linespcf == 'PaschenD'):
-            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf)
+            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
             subPlot2.set_ylim(0.25, inputParams.MaxFluxDisplayed_Obj)
-            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str(V_rot) + " km/s")
+            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
             subPlot1.set_ylim(-0.25, inputParams.MaxFluxDisplayed_Sub)
             subPlot1.set_xlim(10040,10065)
             subPlot2.set_xlim(10040,10065)
         #  ##################### PaschenB
         elif(inputParams.linespcf == 'PaschenB'):
-            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf)
+            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
             subPlot2.set_ylim(0.5, inputParams.MaxFluxDisplayed_Obj)
-            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str(V_rot) + " km/s")
+            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
             subPlot1.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Sub)
             subPlot1.set_xlim(12800, 12840)
             subPlot2.set_xlim(12800, 12840)
         else:
         # Any
-            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf)
+            subPlot2.set_title(inputObject.object + "@" + str(int(dateTitle)) +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
             subPlot2.set_ylim(0.0, inputParams.MaxFluxDisplayed_Obj)
-            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str(V_rot) + " km/s")
+            subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
             subPlot1.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Sub)
+            subPlot1.set_xlim(9326 , 9485)
+            subPlot2.set_xlim(9326 , 9485)
 
-        plt.xlabel(r"$\lambda$  [${\rm \AA}$]")
-        plt.ylabel("Normalised Flux")
+        plt.xlabel(r"$\lambda$  [${\rm \AA}$]", font = 'serif', size= 14)
+        plt.ylabel("Normalised Flux", font= 'serif', size= 14)
         # plt.legend()
         
         if ("nir-tac" not in inputParams.workpath) and ("NIR-TAC" not in inputParams.workpath) :
@@ -1142,6 +1180,7 @@ def starmod(spcfFile, debugging = False):
             if not os.access(inputParams.workpath[:-8] + "\\RES\\" + inputParams.linespcf, os.F_OK):
                 os.mkdir(inputParams.workpath[:-8] + "\\RES\\" + inputParams.linespcf)        
 
+        # plt.show()
         plt.savefig(figureName, dpi = 300)
         if (debugging == True): plt.show()
         
