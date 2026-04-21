@@ -262,7 +262,7 @@ class spcfParams(object):
                     impathStr_list = line[start:end].split()
                     _KEY_ = line.find("IM_PATH")
                     if(_KEY_ < end):
-                        if '.\\\\' in impathStr_list[0][0:2]:
+                        if '.\\\\' in impathStr_list[0][0:3]:
                                 impathStr = './' + impathStr_list[0][3:]
                         elif '.\\' in impathStr_list[0][0:2]:
                                 impathStr = './' + impathStr_list[0][2:]
@@ -389,7 +389,7 @@ class spcfParams(object):
                     _KEY_ = line.find("REF_PATH")
                     if(_KEY_ < end):
                         refpathStr_list = line[start:end].split()
-                        if '.\\\\' in refpathStr_list[0][0:2]:
+                        if '.\\\\' in refpathStr_list[0][0:3]:
                             refpathStr = './' + refpathStr_list[0][3:]
                         elif '.\\' in refpathStr_list[0][0:2]:
                             refpathStr = './' + refpathStr_list[0][2:]
@@ -459,7 +459,7 @@ class spcfParams(object):
                     _KEY_ = line.find("SEC_PATH")
                     if(_KEY_ < end):
                         secRefpathStr_list = line[start:end].split()
-                        if '.\\\\' in secRefpathStr_list[0][0:2]:
+                        if '.\\\\' in secRefpathStr_list[0][0:3]:
                             secRefpathStr = './' + secRefpathStr_list[0][3:]
                         elif '.\\' in secRefpathStr_list[0][0:2]:
                             secRefpathStr = './' + secRefpathStr_list[0][2:]
@@ -529,7 +529,7 @@ class spcfParams(object):
                     _KEY_ = line.find("TER_PATH")
                     if(_KEY_ < end):
                         terRefpathStr_list = line[start:end].split()
-                        if '.\\\\' in terRefpathStr_list[0][0:2]:
+                        if '.\\\\' in terRefpathStr_list[0][0:3]:
                             terRefpathStr = './' + terRefpathStr_list[0][3:]
                         elif '.\\' in terRefpathStr_list[0][0:2]:
                             terRefpathStr = './' + terRefpathStr_list[0][2:]
