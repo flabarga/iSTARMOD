@@ -44,7 +44,7 @@ class FITSObject(object):
         self.BaryCorr              = 0.0
         self.SNR                   = 1.0   
         try:
-            self.fits_hdu_in = fits.open(inputFITS, lazy_load_hdus=False)
+            self.fits_hdu_in = fits.open(inputFITS, ignore_missing_simple= True, ignore_blank= True)
         except IOError:
             print ('File does not exist: {0!r}'.format(inputFITS))
             return
@@ -52,6 +52,7 @@ class FITSObject(object):
                     
     def readLambdaDataMultiSpec(self, header, numberOfCards,numberOfPointPerSpec,numberOfOrders, inlist):
     
+        ###  HEADER VERIFICATION FOR DEBUGGING PURPOSES AND RETRIEVING FIRST spec #####
         stringHeaders = ""
         strDebug = ""
         for iterh in range(numberOfCards):
@@ -61,10 +62,11 @@ class FITSObject(object):
                 if (len(strDebug) == 67):
                     stringHeaders += " "
             except fits.VerifyError:
-                print ("error in format")
+                print ("error in format. Header: ", strDebug)
     
         retValueFind = stringHeaders.find("spec1")
-    
+        ##############################################################################
+
         retValueFind1 = 0
         firstStep = 0
         secondStep = 0
@@ -72,14 +74,15 @@ class FITSObject(object):
         specs = []
         #find the characters between one 'spec' and another
         while retValueFind != -1 and retValueFind1 != -1 and iterator <= len(stringHeaders) :
-            retValueFindDoubleQuotes = stringHeaders[secondStep+retValueFind:].find('\"')#secondStep in the first iteration is 0
-            firstStep = secondStep+retValueFind+retValueFindDoubleQuotes #secondStep in the first iteration is 0
+            retValueFindDoubleQuotes = stringHeaders[secondStep+retValueFind:].find('\"')   # secondStep in the first iteration is 0
+            firstStep = secondStep+retValueFind+retValueFindDoubleQuotes                    # secondStep in the first iteration is 0
             searchString = "spec" + str(iterator+1)
             retValueFind1 = stringHeaders[firstStep:].find(searchString)
             if retValueFind1 != -1:
                 secondStep = firstStep+retValueFind1
             else:
-                secondStep = firstStep+68 #if the kwd 'spec' is not found then use the whole line (we are at the end of the 'specs')
+                secondStep = firstStep+68                                                   # if the kwd 'spec' is not found then 
+                                                                                            # use the whole line (we are at the end of the 'specs')
             stringFound = stringHeaders[firstStep+1:secondStep]
             valuesOfSpec = stringFound.split()
             ##FOR DEBUGGING PURPOSES##############################3
@@ -202,7 +205,7 @@ class FITSObject(object):
                 m += 1                  
         return m
         
-    def selectPixelRange(self, inputParams, primary, subPlot, bPlot):
+    def selectPixelRange(self, inputParams, ipSpecFAp, debugging = False): #, subPlot, bPlot):
         
         self.workingLambdaValues = []
         self.workingDataValues1  = []
@@ -216,11 +219,11 @@ class FITSObject(object):
         skp = []
         for i in range(10):
             skp.append(0) 
-        # print (str(pixelRange[2]))
-        ipSpecFAp = inputParams.spectraFormatAperture
-        if primary == True and inputParams.diffFormatPrimary == True:
-           ipSpecFAp =  inputParams.spectraFormatAperturePrimary
-        print(ipSpecFAp)
+        
+        if debugging == True:   
+            print (str(pixelRange[2]))
+            print(ipSpecFAp)
+        
         if not pixelRange[2]:                        #Specified by Wavelenght in Angstroms
             m = 0
             if self.numberOfOrders > 1:
@@ -233,12 +236,10 @@ class FITSObject(object):
                             xlo = j
                         if ((self.specsLambdaValues[i][j] > pixelRange[0]) and (self.specsLambdaValues[i][j] < pixelRange[1])):
                                 into = True
-                                #print j,
+                                
                                 self.workingLambdaValues.append(self.specsLambdaValues[i][j])
-                                #if j<len(self.dataValues[i]):
                                 self.workingDataValues1 .append(self.dataValues[i][j])
-                                #else:
-                                #    continue
+                                
                                 ##FOR DEBUGGING PURPOSES
                                 #print self.specsLambdaValues[i][j], self.dataValues[i][j]
                                 ##------------------------------------------------------------
@@ -259,8 +260,8 @@ class FITSObject(object):
                                 xhi = j
                                 break
                 self.nanSanityCheck()
-                if bPlot:
-                    subPlot.plot(self.workingLambdaValues,self.workingDataValues1 )
+                # if bPlot:
+                #     subPlot.plot(self.workingLambdaValues,self.workingDataValues1 )
             else:
                 #print (len(self.specsLambdaValues))
                 for j in range(len(self.specsLambdaValues)):
@@ -279,8 +280,8 @@ class FITSObject(object):
                                 xhi = j
                                 break
                 self.nanSanityCheck()
-                if bPlot:
-                    subPlot.plot(self.workingLambdaValues,self.workingDataValues1 )
+                # if bPlot:
+                #     subPlot.plot(self.workingLambdaValues,self.workingDataValues1 )
                 #xlo = xlo+1
                 #xhi = xhi-1
         else:                                        #Specified by Pixels
@@ -306,8 +307,8 @@ class FITSObject(object):
                 self.initialLambda = self.workingLambdaValues[0]
                 self.deltaStep = self.workingLambdaValues[1]-self.workingLambdaValues[0]
             self.nanSanityCheck()
-            if bPlot:
-                subPlot.plot(self.workingLambdaValues,self.workingDataValues1 )
+            # if bPlot:
+            #     subPlot.plot(self.workingLambdaValues,self.workingDataValues1 )
         if (self.deltaStep == 0.0):
             self.deltaStep = self.workingLambdaValues[1]-self.workingLambdaValues[0]
         return xlo, xhi, skp
@@ -420,7 +421,7 @@ class FITSObject(object):
 
         numLambdas = len(self.workingLambdaValues)
         # end   = specName.find('fits')
-        resOutfile = open(specName + ".dat" , 'w')
+        resOutfile = open(specName ,'w')
         
         if nValArray == 2:
             dataValues = self.workingDataValues2
@@ -432,6 +433,33 @@ class FITSObject(object):
         for it in range(numLambdas):
             resOutfile.write(str(self.workingLambdaValues[it]) + "    "+ str(dataValues[it]) + '\n')
         resOutfile.close()
+        return
+    
+    def writeToFits(self, specName, wp, nValArray = 3):
+
+        if nValArray == 2:
+            flux = self.workingDataValues2
+        elif nValArray == 3:
+            flux = self.workingDataValues3
+        else:
+            flux = self.workingDataValues1
+
+        while(len(flux)<len(self.workingLambdaValues)):
+            flux.append(0.0)
+        
+        data = np.vstack([self.workingLambdaValues, flux])
+
+        hdu = fits.PrimaryHDU(data)
+        hdu.header['OBJECT'] = wp['OBJECT']
+        hdu.header['MJD'   ] = wp['MJD'   ]
+        hdu.header['CRVAL1'] = wp['CRVAL1']
+        hdu.header['CDELT1'] = wp['CDELT1']
+        hdu.header['CTYPE1'] = wp['CTYPE1']
+        hdu.header['NAXIS' ] = wp['NAXIS' ]
+        hdu.header['NAXIS1'] = wp['NAXIS1']
+        hdu.header['CRPIX1'] = wp['CRPIX1']
+
+        hdu.writeto(specName, overwrite=True)
         return
     
     def isInPixelExcl(self, fValue, inputParams):
@@ -482,7 +510,7 @@ class FITSObject(object):
             return (valueSpectrum < valueAdjustment * (2.05 - reject_param))      
             
           
-    def continuum_det_and_normalization (self, rejt, strain, inputParams):
+    def continuum_det_and_normalization (self, rejt, strain, inputParams, debugging = False):
         
         # This fragment of code has been inspired from ARESv2 of Sousa after being translated to python from C
         # The polynomial adjustment of the continuum  is made, in the original code, of order 2
@@ -496,7 +524,7 @@ class FITSObject(object):
         workingValues   = []
         workingValues2  = []
         nx_elements  = len(self.workingLambdaValues)
-        print("nx_elements = ", nx_elements)
+        if debugging: print("nx_elements = ", nx_elements)
         for i in range(nx_elements):
             if ((self.workingLambdaValues[i] < inputParams.pixelExcl[1][0] or self.workingLambdaValues[i] > inputParams.pixelExcl[1][1]) and
                 (self.workingLambdaValues[i] < inputParams.pixelExcl[2][0] or self.workingLambdaValues[i] > inputParams.pixelExcl[2][1]) and 
@@ -529,7 +557,7 @@ class FITSObject(object):
                 vecx.append(cpy.copy(workingLambdas[i]))
                 vecy.append(cpy.copy(workingValues[i]))
                 nvec+=1
-        print("nvec = ", nvec)
+        if debugging: print("nvec = ", nvec)
         i = 0
         
         ## Re-arrange the arrays. In order to prepare for the second run
@@ -554,7 +582,7 @@ class FITSObject(object):
                 vecx2.append(cpy.copy(workingLambdas2[i]))
                 vecy2.append(cpy.copy(workingValues2[i]))
                 nvec+=1
-        print("nvec = ", nvec)
+        if debugging: print("nvec = ", nvec)
         
         # DETERMINATION OF THE CONTINUUM
         
