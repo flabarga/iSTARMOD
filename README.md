@@ -64,7 +64,7 @@ Dependencies include:
 ```bash
 python iStarmod.py 
 ```
->And within iStarmod.py you must include the name of the .sm file as an input parameter in the call to the function starmod
+>⚠️ Note: Within iStarmod.py you must include the name of the .sm file as an input parameter in the call to the function starmod
 >There are two additional default parameters: 'plot' to plot the figure (set to True by default), and debugging to print additional output messages (set to False by default)
 >When running a batch of spectra, the plot parameter should be put to 'False'
 
@@ -92,9 +92,12 @@ KEYWORD = value
 #### 1. General Information
 ```ini
 IM_PATH = ./
+RES_PATH = ./
 OBJ_NAME = target_spectrum.fits
 ```
-The name of target spectrum can contain the wildcard "*" to process batch of spectra, with similar names.
+>⚠️ Note:
+>The name of target spectrum can contain the wildcard "*" to process batch of spectra, with similar names.
+>The RES_PATH parameter allows defining the path to the output files
 
 #### 2. Output
 ```ini
@@ -132,6 +135,15 @@ SEC_WGT = 0.3 var
 APERTURE = 34
 LINE = Halpha
 ```
+
+#### 7. Additional Algorithm & Visualization Parameters
+```ini
+WVL_DISPLAY_RANGE = 6550 6580            
+USE_RV_VALUES = NO  
+```
+>⚠️ Note:
+>The WVL_DISPLAY_RANGE additional parameter allows defining the wavelength zone to be displayed in the output figure
+>The USE_RV_VALUES additional parameter allows storing the RV values calculated in previous runs of the algorithm.
 
 ---
 
