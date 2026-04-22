@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iSTARMOD"
+version = "10.0"
+readme = "README.md"
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+dependencies = [
+  "numpy",
+  "scipy",
+  "astropy",
+  "matplotlib",
+]
