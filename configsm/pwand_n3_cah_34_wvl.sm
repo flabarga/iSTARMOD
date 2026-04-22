@@ -4,14 +4,14 @@
 ###### The syntax is 'KEYWORD = value' with one statement per line
 
 ###### GENERAL INFORMATION
-IM_PATH = .//         # path of fits spectra (optional)
-RES_PATH = .\\         # path of the folder storing results of processing spectra
-OBJ_NAME = npwand_n3.fits            # object name
+IM_PATH = /target            # path of fits spectra (optional)
+RES_PATH = .\\               # path of the folder storing results of processing spectra
+OBJ_NAME = npwand_n3.fits    # object name
 
 ###### OUTPUT SPECTRA
-SYN_SPEC = YES               # write output spectra: YES/NO
-SYN_NAME = synpwand_n3_ha_RML.fits                           	# synthetised spectrum name
-SUB_NAME = subpwand_n3_ha_RML.fits                           	# substracted spectrum name (if SYN_SPEC =YES) 
+SYN_SPEC = YES                             # write output spectra: YES/NO
+SYN_NAME = synpwand_n3_ha_RML.fits         # synthetised spectrum name (CHANGE IN AN ACTUAL EXECUTION)
+SUB_NAME = subpwand_n3_ha_RML.fits         # substracted spectrum name (CHANGE IN AN ACTUAL EXECUTION) 
 
 
 ###### INTERPOLATION PARAMETERS
@@ -24,7 +24,7 @@ PIX_EXCL =   # skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
 PIX_EXCL =   # skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
 
 ###### PRIMARY STAR
-REF_PATH = .\\                         # path for fits spectre
+REF_PATH = /referencesp                # path for fits spectre
 PRM_NAME = nhd166620_n2.fits           # primary name
 PRM_RAD = -20.00 var                   # doppler shift: float, keyword (var/fix)
 PRM_ROT = 22.521 var                   # doppler broadening: float, keyword (var/fix)
