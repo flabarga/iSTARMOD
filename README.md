@@ -36,7 +36,7 @@ The code operates **order-by-order on echelle spectra**, improving robustness ag
 
 ---
 ## 🚀 Installation
-Option 1 — From GitHub (recommended)
+Option 1 — From GitHub 
 
 Clone the repository and install locally:
 ```bash
@@ -50,7 +50,7 @@ source .venv/bin/activate   # On Windows: .venv\\Scripts\\activate
 pip install .
 ```
 
-Option 2 — From GitHub Release Archive
+Option 2 — From GitHub Release Archive (recommended)
 1. Download release v11 from the GitHub Releases page
 2. Extract the archive
 3. Open a terminal in the extracted folder
@@ -71,7 +71,6 @@ Dependencies include:
 
 > ⚠️ Note: This project uses Tkinter also for visualization. On some Linux systems,
 > you may need to install it separately (e.g., `sudo apt-get install python3-tk`).
----
 
 ---
 
@@ -115,10 +114,10 @@ istarmod configsm/pwand_n3_cah_34_wvl.sm --plot
 
 This will:
 
->build the synthetic spectrum
->subtract it from the observed spectrum
->compute equivalent widths
->optionally display plots
+- build the synthetic spectrum
+- subtract it from the observed spectrum
+- compute equivalent widths
+- optionally display plots
 
 ## ▶️ Quick Start
 
