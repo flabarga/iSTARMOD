@@ -11,8 +11,8 @@ requires-python = ">=3.10"
 license = "GPL-3.0-only"
 license = {file = "LICENSE"}
 authors = [
-  { name = "Fernando Labarga" },
-  { name = "David Montes" }
+  { name = "Fernando Labarga", email=flabarga@ucm.es },
+  { name = "David Montes", email=dmontes@ucm.es }
 ]
 keywords = [
   "astronomy",
