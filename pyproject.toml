@@ -37,12 +37,6 @@ dependencies = [
   "matplotlib>=3.5",
   "astropy>=5.0"
 ]
-dependencies = [
-  "numpy>=1.23",
-  "scipy>=1.10",
-  "matplotlib>=3.6",
-  "astropy>=5.0"
-]
 
 [project.optional-dependencies]
 dev = [
