@@ -9,8 +9,8 @@ OBJ_NAME = nrej1101_foces02_n2.fits  # object name
 
 ###### OUTPUT SPECTRA
 SYN_SPEC = YES                            # write output spectra: YESaaO
-   SYN_NAME = syfoces_binary_ha_HDV.fits  # synthetised spectrum name
-   SUB_NAME = sufoces_binary_ha_HDV.fits  # substracted spectrum name (if SYN_SPEC =YES) a
+   SYN_NAME = syfoces_binary_ha_HDV.fits  # synthetised spectrum name (CHANGE IN AN ACTUAL EXECUTION)
+   SUB_NAME = sufoces_binary_ha_HDV.fits  # substracted spectrum name (CHANGE IN AN ACTUAL EXECUTION)
 
 ###### INTERPOLATION PARAMETERS
 N_ITER =  8                               # iteration number: integer
