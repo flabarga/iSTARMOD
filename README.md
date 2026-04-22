@@ -249,7 +249,7 @@ This repository includes all components required to reproduce the main figures a
 Example (Hα, single star):
 
 ```bash
-python iStarmod.py 
+istarmod configsm/pwand_n3_cah_34_wvl.sm --plot 
 ```
 
 Outputs:
