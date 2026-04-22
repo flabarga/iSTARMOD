@@ -23,7 +23,7 @@ PIX_EXCL =                       # skip pixel subrange: 2 integers (optional)
 
 
 ###### PRIMARY STAR
-REF_PATH = .\	                 # path of fits spectrum of star of reference
+REF_PATH = /referencesp          # path of fits spectrum of star of reference
 PRM_NAME = nhd92588_n2.fits      # primary filename
 	PRM_RAD  = 53.0 var      # doppler shift: float, keyword (var/fix)
 	PRM_ROT  = 25.510 var    # doppler broadening: float, keyword (var/fix)
@@ -31,7 +31,7 @@ PRM_NAME = nhd92588_n2.fits      # primary filename
                    
                                              
 ###### SECONDARY STAR
-SEC_PATH = .\EstrellasFrias\Ref\nhd97004\ # PATH OF FITS SPECTRUM FOR SECONDARY STAR OF REFERENCE
+SEC_PATH = /referencesp          # PATH OF FITS SPECTRUM FOR SECONDARY STAR OF REFERENCE
 SEC_NAME = nhd97004_n4.fits      # secondary filename: name/NONE
    SEC_RAD  = -80.2 var          # doppler shift: float; 
    SEC_ROT  = 29.600 var         # doppler broadening: float; 
