@@ -50,21 +50,6 @@ Homepage = "https://github.com/flabarga/iSTARMOD"
 Repository = "https://github.com/flabarga/iSTARMOD"
 Issues = "https://github.com/flabarga/iSTARMOD/issues"
 
-[tool.setuptools]
-py-modules = [
-  "fshift",
-  "gui_iStarmod",
-  "interp",
-  "iStarmod_alg_class",
-  "iStarmod_ChiFactor",
-  "iStarmod_console",
-  "iStarmod_fits",
-  "iStarmod_rvvalues",
-  "iStarmod_tools",
-  "starot",
-  "support"
-]
-
 [tool.setuptools.package-data]
 "" = ["lambdas.dat"]
 
@@ -76,3 +61,13 @@ istarmod = "istarmod_cli:main"
 
 [project.gui-scripts]
 istarmod-gui = "gui_iStarmod:main"
+
+[tool.setuptools]
+py-modules = [
+  "iStarmod_automat_reloaded",
+  "gui_iStarmod",
+  "istarmod_cli"
+]
+
+[tool.setuptools.package-dir]
+"" = "src"
