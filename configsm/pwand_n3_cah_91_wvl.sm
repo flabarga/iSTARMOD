@@ -10,8 +10,7 @@ OBJ_NAME = npwand_n3.fits              # object name
 ###### OUTPUT SPECTRA
 SYN_SPEC = YES                         # write output spectra: YES/NO
    SYN_NAME = synpwand_n3_cah_RML.fits # synthetised spectrum name (CHANGE IN AN ACTUAL EXECUTION)
-   SUB_NAME = subpwand_n3_cah_RML.fits # substracted spectrum name (CHANGE IN AN ACTUAL EXECUTION)
-                                       # (if SYN_SPEC =YES)
+   SUB_NAME = subpwand_n3_cah_RML.fits # substracted spectrum name (CHANGE IN AN ACTUAL EXECUTION) # (if SYN_SPEC =YES)
 
 
 ###### INTERPOLATION PARAMETERS
