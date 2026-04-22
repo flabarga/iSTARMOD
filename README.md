@@ -36,11 +36,30 @@ The code operates **order-by-order on echelle spectra**, improving robustness ag
 
 ---
 ## 🚀 Installation
+Option 1 — From GitHub (recommended)
 
+Clone the repository and install locally:
 ```bash
-git clone https://github.com/flabarga/iSTARMOD.git
+git clone https://github.com/<USER>/iSTARMOD.git
 cd iSTARMOD
-pip install -r requirements.txt
+git checkout v11
+
+python -m venv .venv
+source .venv/bin/activate   # On Windows: .venv\\Scripts\\activate
+
+pip install .
+```
+
+Option 2 — From GitHub Release Archive
+1. Download release v11 from the GitHub Releases page
+2. Extract the archive
+3. Open a terminal in the extracted folder
+
+Then run:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install .
 ```
 
 Dependencies include:
@@ -54,6 +73,53 @@ Dependencies include:
 > you may need to install it separately (e.g., `sudo apt-get install python3-tk`).
 ---
 
+---
+
+## ▶️ Usage
+Run iSTARMOD from the repository root directory:
+
+```bash
+istarmod configsm/example.sm
+```
+Common options
+
+Enable plotting:
+```bash
+istarmod configsm/example.sm --plot
+```
+Enable debugging output:
+```bash
+istarmod configsm/example.sm --debug
+```
+## 🖥️ GUI
+Launch the graphical interface:
+```bash
+istarmod-gui
+```
+
+## 📁 Important Notes
+The .sm configuration file defines the full workflow (input spectra, references, fitting parameters, etc.)
+The code expects access to repository folders such as:
+configsm/     → configuration files (.sm)
+target/       → target spectra
+referencesp/  → reference star spectra
+data/         → auxiliary files (e.g., lambdas.dat)
+
+➡️ For this reason, it is recommended to run iSTARMOD from the repository root.
+
+## 🧪 Minimal Example
+
+```bash
+istarmod configsm/pwand_n3_cah_34_wvl.sm --plot
+´´´
+
+This will:
+
+>build the synthetic spectrum
+>subtract it from the observed spectrum
+>compute equivalent widths
+>optionally display plots
+
 ## ▶️ Quick Start
 
 1. Prepare your observed spectrum (FITS or ASCII)
@@ -62,21 +128,14 @@ Dependencies include:
 4. Run:
 
 ```bash
-python iStarmod.py 
-```
+istarmod anyfolder/target.sm --plot
+´´´
+
 >⚠️ Note: Within iStarmod.py you must include the name of the .sm file as an input parameter in the call to the function starmod
 >There are two additional default parameters: 'plot' to plot the figure (set to True by default), and debugging to print additional output messages (set to False by default)
 >When running a batch of spectra, the plot parameter should be put to 'False'
 
-As noted, in the command starmod("filename.sm") the parameter "filename.sm" can specify its absolute or relative path. If no path is specified the "filename.sm" input file must be found in the same directory where the executable is located. As an example, from the files provided in this repository, the content of the python file is:
-```bash
-from istarmod_automat_reloaded import *
-
-starmod("pwand_n3_cah_34_wvl.sm")
-```
-Future version must include a main function and then a wrapper giving a clean CLI entry point to the application.
-
-
+As noted, in the command starmod("filename.sm") the parameter "filename.sm" can specify its absolute or relative path. If no path is specified the "filename.sm" input file must be found in the same directory where the executable is located. 
 ---
 
 ## 🧾 Configuration File (`.sm`)
