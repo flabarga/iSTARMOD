@@ -1,16 +1,78 @@
 [build-system]
-requires = ["setuptools >= 77.0.3"]
+requires = ["setuptools >= 77.0.3", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "iSTARMOD"
-version = "10.0"
+version = "11.0"
+description = "Python tools for spectral subtraction and chromospheric activity analysis in cool stars"
 readme = "README.md"
+requires-python = ">=3.10"
 license = "GPL-3.0-only"
-license-files = ["LICENSE"]
-dependencies = [
-  "numpy",
-  "scipy",
-  "astropy",
-  "matplotlib",
+license = {file = "LICENSE"}
+authors = [
+  { name = "Fernando Labarga" },
+  { name = "David Montes" }
 ]
+keywords = [
+  "astronomy",
+  "spectroscopy",
+  "stellar-activity",
+  "chromospheric-activity",
+  "spectral-subtraction"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Astronomy"
+]
+dependencies = [
+  "numpy>=1.23",
+  "scipy>=1.10",
+  "matplotlib>=3.6",
+  "astropy>=5.0"
+]
+dependencies = [
+  "numpy>=1.23",
+  "scipy>=1.10",
+  "matplotlib>=3.6",
+  "astropy>=5.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2",
+  "twine>=5.0",
+  "pytest>=8.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/flabarga/iSTARMOD"
+Repository = "https://github.com/flabarga/iSTARMOD"
+Issues = "https://github.com/flabarga/iSTARMOD/issues"
+
+[tool.setuptools]
+py-modules = [
+  "fshift",
+  "gui_iStarmod",
+  "interp",
+  "iStarmod_alg_class",
+  "iStarmod_ChiFactor",
+  "iStarmod_console",
+  "iStarmod_fits",
+  "iStarmod_rvvalues",
+  "iStarmod_tools",
+  "starot",
+  "support"
+]
+
+[tool.setuptools.package-data]
+"" = ["lambdas.dat"]
+
+[tool.pytest.ini_options]
+python_files = ["unittest*.py", "test_*.py"]
