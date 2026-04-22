@@ -4,7 +4,7 @@
 ###### The syntax is 'KEYWORD = value' with one statement per line
 
 ###### GENERAL INFORMATION
-IM_PATH  = /target                             # path of fits spectra (optional)
+IM_PATH  = /target                        # path of fits spectra (optional)
 OBJ_NAME = nrej1101_foces02_n2.fits       # object name
 
 ###### OUTPUT SPECTRA
@@ -13,21 +13,21 @@ SYN_SPEC = YES                            # write output spectra: YESaaO
    SUB_NAME = sufoces_binary_ha_HDV.fits  # substracted spectrum name (CHANGE IN AN ACTUAL EXECUTION)
 
 ###### INTERPOLATION PARAMETERSvar
-N_ITER =  8                      # iteration number: integer
-PIX_ZONE = 6515 6595  wvl        # pixel range for the fit: 2 integers
-PIX_EXCL = 6515	6520  wvl        # BLUE EXCLUSION ZONE   skip pixel subrange: 2 integers (optional)
-PIX_EXCL = 6550 6575  wvl        # HALPHA EXCLUSION ZONE skip pixel subrange: 2 integers (optional)
-PIX_EXCL =                       # skip pixel subrange: 2 integers (optional)
-PIX_EXCL =                       # skip pixel subrange: 2 integers (optional)
-PIX_EXCL =                       # skip pixel subrange: 2 integers (optional)
+N_ITER =  8                       # iteration number: integer
+PIX_ZONE = 6515 6595  wvl         # pixel range for the fit: 2 integers
+PIX_EXCL = 6515	6520  wvl         # BLUE EXCLUSION ZONE   skip pixel subrange: 2 integers (optional)
+PIX_EXCL = 6550 6575  wvl         # HALPHA EXCLUSION ZONE skip pixel subrange: 2 integers (optional)
+PIX_EXCL =           # skip pixel subrange: 2 integers (optional)
+PIX_EXCL =           # skip pixel subrange: 2 integers (optional)
+PIX_EXCL =           # skip pixel subrange: 2 integers (optional)
 
 
 ###### PRIMARY STAR
-REF_PATH = /referencesp          # path of fits spectrum of star of reference
-PRM_NAME = nhd92588_n2.fits      # primary filename
-	PRM_RAD  = 53.0 var      # doppler shift: float, keyword (var/fix)
-	PRM_ROT  = 25.510 var    # doppler broadening: float, keyword (var/fix)
-	PRM_WGT  = 0.508 fix     # weight: float, keyword (var/fix)
+REF_PATH = /referencesp           # path of fits spectrum of star of reference
+PRM_NAME = nhd92588_n2.fits       # primary filename
+	PRM_RAD  = 53.0 var           # doppler shift: float, keyword (var/fix)
+	PRM_ROT  = 25.510 var         # doppler broadening: float, keyword (var/fix)
+	PRM_WGT  = 0.508 fix          # weight: float, keyword (var/fix)
                    
                                              
 ###### SECONDARY STAR
@@ -44,7 +44,7 @@ MODE=  ech                       # spectra format if multidimensionnal: mult/ech
    LINE= Halpha                  # Line Specification
    
 ###### ALGORITHM & VISUALISATION PARAMS
-MAXFLUXDISP_OBJ = 2. 			# Max. flux to display in the object+ref spectra window
-MAXFLUXDISP_SUB = 1. 			# Max. flux to display in the subtracted spectrum window
-FINDMAX_TOLERANCE = 0.001		# to find the maximum of the subtracted spectra @ calculating the integral 
+MAXFLUXDISP_OBJ = 2. 			 # Max. flux to display in the object+ref spectra window
+MAXFLUXDISP_SUB = 1. 			 # Max. flux to display in the subtracted spectrum window
+FINDMAX_TOLERANCE = 0.001		 # to find the maximum of the subtracted spectra @ calculating the integral 
 ################################# END #########################################
