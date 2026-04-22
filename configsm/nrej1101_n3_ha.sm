@@ -4,7 +4,7 @@
 ###### The syntax is 'KEYWORD = value' with one statement per line
 
 ###### GENERAL INFORMATION
-IM_PATH  = .\                             # path of fits spectra (optional)
+IM_PATH  = /target                             # path of fits spectra (optional)
 OBJ_NAME = nrej1101_foces02_n2.fits       # object name
 
 ###### OUTPUT SPECTRA
