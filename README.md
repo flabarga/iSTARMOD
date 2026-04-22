@@ -97,12 +97,15 @@ istarmod-gui
 ```
 
 ## 📁 Important Notes
-The .sm configuration file defines the full workflow (input spectra, references, fitting parameters, etc.)
-The code expects access to repository folders such as:
-configsm/     → configuration files (.sm)
-target/       → target spectra
-referencesp/  → reference star spectra
-data/         → auxiliary files (e.g., lambdas.dat)
+· The .sm configuration file defines the full workflow (input spectra, references, fitting parameters, etc.)
+· The code expects access to repository folders such as:
+ 
+ ```
+ configsm/     → configuration files (.sm)
+ target/       → target spectra
+ referencesp/  → reference star spectra
+ data/         → auxiliary files (e.g., lambdas.dat)
+```
 
 ➡️ For this reason, it is recommended to run iSTARMOD from the repository root.
 
