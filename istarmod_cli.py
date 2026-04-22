@@ -2,7 +2,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from iStarmod_automat_reloaded import starmod
+from iStarmod_console import starmod
 
 
 def main() -> int:
@@ -10,22 +10,19 @@ def main() -> int:
         prog="istarmod",
         description="Run iSTARMOD from a .sm configuration file."
     )
-
     parser.add_argument(
         "config",
         help="Path to the iSTARMOD .sm configuration file"
     )
-
     parser.add_argument(
         "--debug",
         action="store_true",
         help="Enable debugging mode"
     )
-
     parser.add_argument(
         "--plot",
         action="store_true",
-        help="Enable plotting of results"
+        help="Enable plotting"
     )
 
     args = parser.parse_args()
