@@ -70,3 +70,9 @@ py-modules = [
 
 [tool.pytest.ini_options]
 python_files = ["unittest*.py", "test_*.py"]
+
+[project.scripts]
+istarmod = "istarmod_cli:main"
+
+[project.gui-scripts]
+istarmod-gui = "gui_iStarmod:main"
