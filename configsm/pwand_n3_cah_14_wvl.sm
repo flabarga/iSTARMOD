@@ -4,7 +4,7 @@
 ###### The syntax is 'KEYWORD = value' with one statement per line
 
 ###### GENERAL INFORMATION
-IM_PATH  = .\  			# path of fits spectra (optional)
+IM_PATH  = /target  			# path of fits spectra (optional)
 OBJ_NAME = npwand_n3.fits       # object name
 
 ###### OUTPUT SPECTRA
@@ -24,10 +24,10 @@ PIX_EXCL =			# skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
 
 
 ###### PRIMARY STAR
-REF_PATH = .\  # path for fits spectre
+REF_PATH = /referencesp         # path for fits spectre
 PRM_NAME = nhd166620_n2.fits    # primary name
 PRM_RAD  = -20.00 var           # doppler shift: float, keyword (var/fix)
-PRM_ROT  = 22.521 var             # doppler broadening: float, keyword (var/fix)
+PRM_ROT  = 22.521 var           # doppler broadening: float, keyword (var/fix)
 PRM_WGT  = 1.0 fix              # weight: float, keyword (var/fix)
 
 
