@@ -97,8 +97,8 @@ istarmod-gui
 ```
 
 ## 📁 Important Notes
-· The .sm configuration file defines the full workflow (input spectra, references, fitting parameters, etc.)
-· The code expects access to repository folders such as:
+- The .sm configuration file defines the full workflow (input spectra, references, fitting parameters, etc.)
+- The code expects access to repository folders such as:
  
  ```
  configsm/     → configuration files (.sm)
