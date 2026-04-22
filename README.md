@@ -111,7 +111,7 @@ data/         → auxiliary files (e.g., lambdas.dat)
 
 ```bash
 istarmod configsm/pwand_n3_cah_34_wvl.sm --plot
-´´´
+```
 
 This will:
 
@@ -129,13 +129,13 @@ This will:
 
 ```bash
 istarmod anyfolder/target.sm --plot
-´´´
+```
 
 >⚠️ Note: Within iStarmod.py you must include the name of the .sm file as an input parameter in the call to the function starmod
 >There are two additional default parameters: 'plot' to plot the figure (set to True by default), and debugging to print additional output messages (set to False by default)
 >When running a batch of spectra, the plot parameter should be put to 'False'
-
 As noted, in the command starmod("filename.sm") the parameter "filename.sm" can specify its absolute or relative path. If no path is specified the "filename.sm" input file must be found in the same directory where the executable is located. 
+
 ---
 
 ## 🧾 Configuration File (`.sm`)
