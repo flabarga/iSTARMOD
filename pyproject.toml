@@ -7,8 +7,7 @@ name = "iSTARMOD"
 version = "11.0"
 description = "Python tools for spectral subtraction and chromospheric activity analysis in cool stars"
 readme = "README.md"
-requires-python = ">=3.10"
-license = "GPL-3.0-only"
+requires-python = ">=3.50"
 license = {file = "LICENSE"}
 authors = [
   { name = "Fernando Labarga", email="flabarga@ucm.es" },
@@ -50,9 +49,6 @@ Homepage = "https://github.com/flabarga/iSTARMOD"
 Repository = "https://github.com/flabarga/iSTARMOD"
 Issues = "https://github.com/flabarga/iSTARMOD/issues"
 
-[tool.setuptools.package-data]
-"" = ["lambdas.dat"]
-
 [tool.pytest.ini_options]
 python_files = ["unittest*.py", "test_*.py"]
 
@@ -64,7 +60,7 @@ istarmod-gui = "gui_iStarmod:main"
 
 [tool.setuptools]
 py-modules = [
-  "iStarmod_automat_reloaded",
+  "iStarmod_console",
   "gui_iStarmod",
   "istarmod_cli"
 ]
