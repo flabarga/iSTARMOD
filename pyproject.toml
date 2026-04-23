@@ -52,24 +52,27 @@ Issues = "https://github.com/flabarga/iSTARMOD/issues"
 [tool.pytest.ini_options]
 python_files = ["unittest*.py", "test_*.py"]
 
-[project.scripts]
-istarmod = "istarmod_cli:main"
-
-[project.gui-scripts]
-istarmod-gui = "gui_iStarmod:main"
-
 [tool.setuptools]
 py-modules = [
   "iStarmod_console",
   "gui_iStarmod",
   "istarmod_cli",
-  "iStarmod_fits",
-  "iStarmod_tools",
-  "iStarmod_ChiFactor",
+  "fshift",
+  "interp",
   "iStarmod_alg_class",
+  "iStarmod_ChiFactor",
+  "iStarmod_fits",
+  "iStarmod_rvvalues",
+  "iStarmod_tools",
   "starot",
   "support"
 ]
 
 [tool.setuptools.package-dir]
 "" = "src"
+
+[project.scripts]
+istarmod = "istarmod_cli:main"
+
+[project.gui-scripts]
+istarmod-gui = "gui_iStarmod:main"
