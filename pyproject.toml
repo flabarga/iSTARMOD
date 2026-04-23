@@ -62,7 +62,13 @@ istarmod-gui = "gui_iStarmod:main"
 py-modules = [
   "iStarmod_console",
   "gui_iStarmod",
-  "istarmod_cli"
+  "istarmod_cli",
+  "iStarmod_fits",
+  "iStarmod_tools",
+  "iStarmod_ChiFactor",
+  "iStarmod_alg_class",
+  "starot",
+  "support"
 ]
 
 [tool.setuptools.package-dir]
