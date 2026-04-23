@@ -36,13 +36,13 @@ The code operates **order-by-order on echelle spectra**, improving robustness ag
 
 ---
 ## 🚀 Installation
-Requirements
+*Requirements*
 
  - Python 3.10 or later
  - pip
  - venv (recommended)
 
-Linux / macOS
+*Linux / macOS*
 
 Clone the repository and install locally:
 
@@ -58,7 +58,7 @@ python -m pip install --upgrade pip setuptools wheel
 pip install .
 ```
 
-Windows (PowerShell)
+*Windows (PowerShell)*
 
 Clone the repository and install locally:
 
@@ -85,7 +85,7 @@ and then activate again:
 ```bash
 .\.venv\Scripts\Activate
 ```
-Windows (without activation)
+*Windows (without activation)*
 
 If you prefer, you can install without activating the environment:
 
@@ -95,7 +95,7 @@ python -m venv .venv
 .\.venv\Scripts\python -m pip install .
 ```
 
-Install from a GitHub release archive
+*Install from a GitHub release archive*
 1. Download release v11 from the GitHub Releases page.
 2. Extract the archive.
 3. Open a terminal in the extracted folder.
@@ -110,7 +110,7 @@ Dependencies include:
 - matplotlib
 
 > ⚠️ Note: This project uses Tkinter also for visualization. On some Linux systems,
-> you may need to install it separately (e.g., `sudo apt-get install python3-tk`).
+> you may need to install it separately (see below).
 
 ---
 
@@ -138,7 +138,7 @@ Launch the graphical interface:
 istarmod-gui
 ```
 
-## 📁 Important Notes
+## 📁 Important Notes. Repository-dependent files
 - The .sm configuration file defines the full workflow (input spectra, references, fitting parameters, etc.)
 - The code expects access to repository folders such as:
  
