@@ -12,52 +12,33 @@
 #                fshift (npts, datain, shift, datout)
 #                readConfigFile(configfile)
 #                plot(inObj, inputParams)
+#                CalculateEW
 ################################################################
 # Author:           Orig.: Sam Barden 1984 / Final: Fernando Labarga 2017
 # Modifications:    dph = David Huenemoerder     adw = Alan Welty
 # Migration to Python  Fernando Labarga 2017
 ################################################################
-#   xx-may-85  dph  Modified for CRDS 
-#                   File i/o changed to handle bmo format files.
-#   xx-jun-88  dph  sshft & tshft removed from read, forced to zero;
-#                   (allows iraf/unix file names of arbitrary length)
-#   xx-jul-88  dph  modified more to suit iraf:
-#                   file num may now be 4 digits
-#                   (i.e. syn1234, num from 1st line of input file);
-#                   '.dat' suffix dropped from filenames.
-#   03-nov-88  dph  read lines from iraf 2d echelle images.
-#                   Line numbers are now read after the filenames.
-#   28-jul-92  adw  Fixes for IRAF header format changes;
-#                   make code more readable; allow 1D and 2D data.
-#   12-aug-92  adw  Work out a few minor bugs; format output
-#   04-feb-93  adw  Minor tweaks to parm search; add output switch
-#   10-mar-93  adw  Put UT & DATE-OBS of object in output header
-#   21-jun-93  adw  New broadening subroutine ("starot" from "disk") 
-#                   and fix up broadening test loop
-#   04-jan-94  adw  Eliminate unused stuff.  Use new FFT starot.
-#   29-mar-94  adw  Fix data array setup logic.
-#   25-apr-94  adw  Final fixes for release to interested parties.
 #   15-feb-17  ffla Migration from FORTRAN code to python
 #                   Correction of the features of the kernel/broadening function in starot
+#   [...]
+#   11-oct-24 ffla upload to GitHUb 
 ################################################################################################
 ################################################################################################
 
 import os 
 import matplotlib.pyplot as plt
-# import iStarmod_fits as fits_tools
 from iStarmod_fits import * 
 import iStarmod_tools as tools
 import support as supp
 import starot as starot
 import fshift as fshift
-# import writeFitsSpec as WFS
 import copy as cpy
 import math
 from pathlib import Path
 import iStarmod_rvvalues as rv
 
 
-def starmod(spcfFile, debugging = False):
+def starmod(spcfFile, plot = True, debugging = False):
 
     ##################################################################################3
     #READING THE SPECIFICATION FILE
@@ -79,6 +60,7 @@ def starmod(spcfFile, debugging = False):
     #############################
     #If the parameter is 'fix', then tst[n] must be zero
     #When parameter is 'var', is assigned to tst[n] the input parameter value
+    print()
     tst.append([])
     if inputParams.PRMRad[1]:     tst[0].append(0)
     else:                         tst[0].append(inputParams.PRMRad[0])
@@ -86,7 +68,7 @@ def starmod(spcfFile, debugging = False):
     else:                         tst[0].append(inputParams.PRMRot[0])
     if inputParams.PRMWeight[1]:  tst[0].append(0)
     else:                         tst[0].append(inputParams.PRMWeight[0])
-    print ("tst[0]: " + str(tst[0]))
+    if debugging:   print ("tst[0]: " + str(tst[0]))
     tst.append([])
     if inputParams.SECRad[1]:     tst[1].append(0)
     else:                         tst[1].append(inputParams.SECRad[0])
@@ -94,7 +76,7 @@ def starmod(spcfFile, debugging = False):
     else:                         tst[1].append(inputParams.SECRot[0])
     if inputParams.SECWeight[1]:  tst[1].append(0)
     else:                         tst[1].append(inputParams.SECWeight[0])
-    print ("tst[1]: " + str(tst[1]))
+    if debugging:   print ("tst[1]: " + str(tst[1]))
     tst.append([])
     if inputParams.TERRad[1]:     tst[2].append(0)
     else:                         tst[2].append(inputParams.TERRad[0])
@@ -102,7 +84,7 @@ def starmod(spcfFile, debugging = False):
     else:                         tst[2].append(inputParams.TERRot[0])
     if inputParams.TERWeight[1]:  tst[2].append(0)
     else:                         tst[2].append(inputParams.TERWeight[0])
-    print ("tst[2]: " + str(tst[2]))
+    if debugging:   print ("tst[2]: " + str(tst[2]))
     nstar = 3
     if (inputParams.tertiaryStarfits != None) or ('NONE' in inputParams.secondaryStarfits0):
         nstar = 2
@@ -163,23 +145,22 @@ def starmod(spcfFile, debugging = False):
             rv_values = rv.RVValues()
             if not os.access(Path(inputParams.resultspath), os.F_OK): 
                 os.mkdir(Path(inputParams.resultspath))
-            if not os.access(Path(inputParams.resultspath + '\\RES'), os.F_OK): 
-                os.mkdir(Path(inputParams.resultspath + '\\RES'))
+            if not os.access (Path(inputParams.resultspath) / Path('RES'), os.F_OK): 
+                os.mkdir(Path(inputParams.resultspath) / Path("RES"))
 
-            if Path(inputParams.resultspath == ".\\"): inputParams.resultspath = "."
-            filenameRV1 = (inputParams.resultspath + "\\RES\\" + "rvvalues.dat")
-            filenameRV2 = (inputParams.resultspath + "\\RES\\")
+            if Path(inputParams.resultspath) == Path("\\"): inputParams.resultspath = "."
+            filenameRV1 = inputParams.resultspath / Path("RES") / Path("rvvalues.dat")
+            filenameRV2 = inputParams.resultspath / Path("RES")
 
             if os.access(filenameRV1, os.F_OK):
                 rv_values.readFile(filenameRV1)
                 rv_values_available = True
-                print ("filenameRV:" , filenameRV1)
+                if (debugging == True): print ("filenameRV:" , filenameRV1)
             else:
                 if not os.access(filenameRV2, os.F_OK):
                     os.mkdir(filenameRV2) 
-                    print("Here!!!")       
-                # rv_outfile = open(filenameRV2, 'a')
-                print ("outfilenameRV:" , filenameRV2)
+                if (debugging == True): 
+                    print ("outfilenameRV:" , filenameRV2)
     else:
         rv_values_available = False
         
@@ -193,7 +174,7 @@ def starmod(spcfFile, debugging = False):
     # print("Path =", dirPath)
     # print("Exists?", dirPath.exists())
     # print("Is dir?", dirPath.is_dir())
-    print("Path = ", dirPath)
+    print("working Path = ", dirPath)
     listFITSFiles = list(dirPath.glob("car-*.fits"))
     # To cope with specifying not CARMENES files
     if len(listFITSFiles) == 0 and '*' not in inputParams.objectInputFits0:
@@ -204,7 +185,7 @@ def starmod(spcfFile, debugging = False):
     if len(listFITSFiles) == 0:
         listFITSFiles = list(dirPath.glob("*.dat"))
 
-    print(listFITSFiles)
+    print("list FITS files: ", listFITSFiles)
 
     try:
         for objectInputFITSfromList in listFITSFiles:
@@ -222,15 +203,15 @@ def starmod(spcfFile, debugging = False):
             # subPlot2.clear()    
             
             objectInputFITS = objectInputFITSfromList
-            # print("objectinputfits : ", objectInputFITS)
+            if debugging:  print("objectinputfits : ", objectInputFITS)
             inputObject = tools.readFitsFile(objectInputFITS, inputParams.spectraFormatAperture)
             # print("MJD-OBS = ", inputObject.date)
             #Reading and preprocessing Input file
             #evaluate if 'pixel range' is given in pixels or in Angstroms
             #it is assumed that the start and end pixels specified belong to the same order 
-            xlo,xhi, skp = inputObject.selectPixelRange(inputParams, inputParams.spectraFormatAperture)#, subPlot2, False)
+            xlo,xhi, skp = inputObject.selectPixelRange(inputParams, inputParams.spectraFormatAperture, debugging)#, subPlot2, False)
             inputObject.nanSanityCheck()
-            print("SNR = ", inputObject.SNR)
+            if debugging: print("SNR = ", inputObject.SNR)
             # The next lines, following (at least partially) the algorithms set out in Sousa et al., A&A 577, A67 (2015)
             # It is needed for CARMENES, and from other sources, spectra
             ##################################### NORMALIZATION ############
@@ -269,11 +250,10 @@ def starmod(spcfFile, debugging = False):
 
             xObjmean = supp.gtmean(nptsInputObj,inputObject.workingDataValues1,0,nptsInputObj-1,skp)
             midLambda = inputObject.initialLambda + inputParams.deltaStep * len(inputObject.workingLambdaValues) / 2.0
-            print(nptsInputObj, inputObject.workingLambdaValues[len(inputObject.workingLambdaValues)-1], midLambda)
+            if (debugging == True): print(nptsInputObj, inputObject.workingLambdaValues[len(inputObject.workingLambdaValues)-1], midLambda)
             cnst = (midLambda/299792.458)/inputParams.deltaStep     #Conversion Factor from Doppler Effect Formula
 
             #Reading Prymary (Reference) Star spectrum
-            # print("primaryStarfits : ", inputParams.primaryStarfits)
             if (inputParams.spectraFormatAperture != -1 and inputParams.spectraFormatAperturePrimary == -1):
                 primaryStar = tools.readFitsFile(inputParams.primaryStarfits, inputParams.spectraFormatAperture)
                 if primaryStar != None:
@@ -282,10 +262,9 @@ def starmod(spcfFile, debugging = False):
                 primaryStar = tools.readFitsFile(inputParams.primaryStarfits, inputParams.spectraFormatAperturePrimary)
                 if primaryStar != None:
                     primaryStar.selectPixelRange(inputParams, inputParams.spectraFormatAperturePrimary)#, subPlot2, False)
-            # primaryStar.normalizeSpectrum(inputParams, False)
             if primaryStar != None:     
                 primaryStar.nanSanityCheck()
-                print("SNR = ", primaryStar.SNR)
+                if debugging:   print("SNR = ", primaryStar.SNR)
                 ##################################### NORMALIZATION ############
                 rejt = 1. - (1/primaryStar.SNR)
                 if (primaryStar.SNR < 80):
@@ -354,9 +333,7 @@ def starmod(spcfFile, debugging = False):
                 secondaryStar.workingDataValues3 = cpy.copy(secondaryStar.workingDataValues1)
                 nptsSecSt = len(secondaryStar.workingDataValues1)
                 xSecStarmean = supp.gtmean(nptsSecSt,secondaryStar.workingDataValues1,0,nptsSecSt-1,skp)
-                #the way the spectrum is plotted depends on the format
-                #plot(secondaryStar, inputParams)
-            
+                
             if 'NONE' not in inputParams.tertiaryStarfits.name:
                 if (inputParams.spectraFormatApertureTertiary != -1):
                     tertiaryStar = tools.readFitsFile(inputParams.tertiaryStarfits, inputParams.spectraFormatApertureTertiary)
@@ -390,8 +367,7 @@ def starmod(spcfFile, debugging = False):
                 tertiaryStar.workingDataValues3 = cpy.copy(tertiaryStar.workingDataValues1)
                 nptsTerSt = len(tertiaryStar.workingDataValues1)
                 xTerStarmean = supp.gtmean(nptsTerSt,tertiaryStar.workingDataValues1,0,nptsTerSt-1,skp)
-                #the way the spectrum is plotted depends on the format
-                #plot(tertiaryStar, inputParams)
+                
             
             ######################## NEW LINES 16/07 MODIFY THE WAY THE SPECTRA ARE SHIFTED ####
             ###################### New lines 10/05/2020
@@ -403,9 +379,8 @@ def starmod(spcfFile, debugging = False):
                 deltaStepProc = deltaStepAvg1
             cnst = (midLambda/299792.458)/deltaStepProc
             ##########################################   10/07/2020  
+            
             ##################################################################################3
-
-                        ##################################################################################3
             #PROCESSING THE SPECTRA
             ##################################################################################3
             ndata = 64
@@ -429,32 +404,31 @@ def starmod(spcfFile, debugging = False):
             print (' V_rot   = ' + "\t" + str(inputParams.PRMRot[0]) + "\t" + str(inputParams.SECRot[0]) + "\t" + str(inputParams.TERRot[0]))
             print (' Weight  = ' + "\t" + str('{:4.3f}'.format(inputParams.PRMWeight[0])) + "\t" + str('{:4.3f}'.format(inputParams.SECWeight[0])) + "\t" + str('{:4.3f}'.format(inputParams.TERWeight[0])))
             print ('-----------------------------------------------')
-            print (' ')
             print (' Object    = ', objectInputFITS)
             print (' Primary   = ', inputParams.primaryStarfits)
             print (' Secondary = ', inputParams.secondaryStarfits)
             print (' Tertiary  = ', inputParams.tertiaryStarfits)
             print (' Order     = ' + str(inputParams.spectraFormatAperture))
-            print 
-            
+            # print ("")
+            print ('####################################################')
+            print ("")
+            print ("")
+            print ("-----------------------------------------------")
+
             for niter in range(inputParams.numIter):
                                 
                 ######################################################################################
                 #                Set-up of the initial guess                                          
                 ######################################################################################
                 print ("ITERATION #" + str(niter+1))
-                # print ("Weight parameter [primary star]: " + str(inputParams.PRMWeight[0]))
                 #print primaryStar.workingDataValues3
-                #print "//////pwt = ", pwt, "midLambda = ", midLambda, "cnst: ", cnst, "deltaStep = ", inputParams.deltaStep
                 supp.scale(nptsPrimSt,primaryStar.workingDataValues1,pwt,primaryStar.workingDataValues3)
                 
                 ###############################################Rotationally broaden it
                 # (workingDataValues2 holds scaled & broad prim)
-                # print ("Rotation parameter [primary star]: " + str(inputParams.PRMRot[0]))
                 primaryStar.workingDataValues2 = starot.starot(nptsPrimSt, primaryStar.workingDataValues3, inputParams.PRMRot[0],
                                                                 midLambda, deltaStepProc)# ,primaryStar.workingDataValues2)
                 ###############################################Shift it in radial velocity
-                # print ("Radial Velocity parameter [primary star]: " + str(inputParams.PRMRad[0]))
                 pdch = inputParams.PRMRad[0] * cnst
                 primaryStar.workingDataValues3 = fshift.fshift(nptsPrimSt,primaryStar.workingDataValues2,pdch)
                 
@@ -487,7 +461,7 @@ def starmod(spcfFile, debugging = False):
                 #-----------------------------------------------------------------------------------
                 #///////////////////////////////////////////////////////////////////////////////////
                 xmean = xPrimStarmean*inputParams.PRMWeight[0] + xSecStarmean*inputParams.SECWeight[0] + xTerStarmean*inputParams.TERWeight[0]
-                #minssr = 10.0
+                # minssr = 10.0
                 # It should be that: npts == nptsInputObj == nptsPrimSt == nptsSecSt == nptsTerSt 
                 # But just in case, is included the safeguard of the while loop in the case nstar == 1
                 if (niter == 0):
@@ -518,13 +492,13 @@ def starmod(spcfFile, debugging = False):
                             
                 #----------------- If there exists a RV value available, use it ----------------------------------------------
                 if nstar == 1 and rv_values_available :
-                    print("****************************************************    searching...")
+                    print("--------------------------------------------------->    searching...")
                     rv_value_iter = rv_values.find_mjd(inputObject.date)
                     if rv_value_iter == None:
                         tst[0][0] = 1
                         rv_values_available = False
                     elif nstar == 1:
-                        print("************************************************    found...", rv_value_iter[1])
+                        print("----------------------------------------------->    found...", rv_value_iter[1])
                         tst[0][0] = 0
                         inputParams.PRMRad[0] = rv_value_iter[1]
                         pdch = inputParams.PRMRad[0] * cnst
@@ -532,7 +506,6 @@ def starmod(spcfFile, debugging = False):
                 #------------------------------------------------------------------------------------------------------------
                 #Shift the Primary
                 if (tst[0][0] != 0):
-                    # print ("    Shifting the primary" )
                     #Shift p2 and store in s3
                     minssr = minssr_init
                     #print ("minssr = ", str(minssr))
@@ -645,7 +618,6 @@ def starmod(spcfFile, debugging = False):
                 #Rotate the primary
                 if (tst[0][1] != 0):
                     # print ("    Rotating the primary")
-                    #print ("minssr = ", str(minssr))
                     supp.scale(nptsPrimSt,primaryStar.workingDataValues1,inputParams.PRMWeight[0], primaryStar.workingDataValues3)
                     pdch = inputParams.PRMRad[0] * cnst
                     primaryStar.workingDataValues2 = fshift.fshift(nptsPrimSt,primaryStar.workingDataValues3,pdch)
@@ -669,10 +641,8 @@ def starmod(spcfFile, debugging = False):
                                     minssr = ssr
                                     bstprm[0][1] = parm
                             parm = parm + deltaparam
-                        #continue #510
                         deltaparam = deltaparam/10
                         parm = bstprm[0][1] - (10 * deltaparam)
-                    #continue #515
                     inputParams.PRMRot[0] = bstprm[0][1]
                     primaryStar.workingDataValues3 = starot.starot(nptsPrimSt, primaryStar.workingDataValues2,inputParams.PRMRot[0],
                                                                 midLambda, deltaStepProc)#, primaryStar.workingDataValues3)
@@ -702,10 +672,8 @@ def starmod(spcfFile, debugging = False):
                                     minssr = ssr
                                     bstprm[1][1] = parm
                             parm = parm + deltaparam #519
-                            #continue #520
                         deltaparam = deltaparam/10
                         parm = bstprm [1][1] - (10 * deltaparam)
-                    #continue #525
                     inputParams.SECRot[0] = bstprm[1][1]
                     secondaryStar.workingDataValues3 = starot.starot(nptsSecSt, secondaryStar.workingDataValues2,inputParams.SECRot[0],
                                                                 midLambda, deltaStepProc)#, secondaryStar.workingDataValues3)
@@ -721,8 +689,8 @@ def starmod(spcfFile, debugging = False):
                     parm = inputParams.TERRot[0] - 50.0
                     deltaparam = 5.0
                     for j in range(3): #do 525
-                        for i in range(22): #do 520 i = 1,21
-                            if (parm >= 0.0): #if <0 go to 519
+                        for i in range(22): 
+                            if (parm >= 0.0):
                                 tertiaryStar.workingDataValues3 = starot.starot(nptsTerSt, tertiaryStar.workingDataValues2, parm, midLambda, deltaStepProc)#, tertiaryStar.workingDataValues3)
                                 inputObject.workingDataValues2 = supp.sumthm(nptsTerSt,primaryStar.workingDataValues3, secondaryStar.workingDataValues3,tertiaryStar.workingDataValues3)
                                 supp.scale2 (nptsPrimSt,inputObject.workingDataValues2,xObjmean/xmean)
@@ -730,14 +698,12 @@ def starmod(spcfFile, debugging = False):
                                 if (ssr < minssr):
                                     minssr = ssr
                                     bstprm[1][1] = parm
-                            parm = parm + deltaparam #519
-                            #continue #520
+                            parm = parm + deltaparam 
                         deltaparam = deltaparam/10
                         parm = bstprm [2][1] - (10.0 * deltaparam)
-                    #continue #525
                     inputParams.TERRot[0] = bstprm[1][1]
                     tertiaryStar.workingDataValues3 = starot.starot(nptsTerSt, tertiaryStar.workingDataValues2, inputParams.TERRot[0], 
-                                                            midLambda, deltaStepProc)#, tertiaryStar.workingDataValues3)
+                                                            midLambda, deltaStepProc)
                 #end if
                 
                 #####################################################                       
@@ -872,8 +838,6 @@ def starmod(spcfFile, debugging = False):
                 #             Write iteration results 
                 #             to the standard output
                 #####################################################
-                # V_rot = int(inputParams.PRMRot[0]*1000)/1000       
-                # print
                 # print (' Results of iteration #' + str(niter+1))
                 print (' Minimum RMS of the residuals = ' + str('{:8.5f}'.format(math.sqrt (math.fabs(minssr) / inputParams.cnt))))
                 print ('-----------------------------------------------')
@@ -912,7 +876,7 @@ def starmod(spcfFile, debugging = False):
             if nstar == 2:
                 inputObject.workingDataValues2 = supp.sumthm(nptsPrimSt,primaryStar.workingDataValues3,secondaryStar.workingDataValues3,zeroes)
             elif nstar == 1:
-                inputObject.workingDataValues2 = cpy.copy(primaryStar.workingDataValues3) #sumthm(nptsPrimSt,primaryStar.workingDataValues3,zeroes,zeroes)        
+                inputObject.workingDataValues2 = cpy.copy(primaryStar.workingDataValues3) 
             else:
                 inputObject.workingDataValues2 = supp.sumthm(nptsPrimSt,primaryStar.workingDataValues3,
                                                     secondaryStar.workingDataValues3,tertiaryStar.workingDataValues3)
@@ -953,10 +917,10 @@ def starmod(spcfFile, debugging = False):
                     inputObject.writeToDat (Path(synthSpecName_dat), 2)
 
             ####################################################################
-            #         Substract model from object
+            #         Subtract model from object
             ####################################################################
             for i in range(nptsInputObj):
-                #Substracted Spectrum = Initial Read Spectrum - Synthetic Spectrum
+                #Subtracted Spectrum = Initial Read Spectrum - Synthetic Spectrum
                 inputObject.workingDataValues3[i] = (inputObject.workingDataValues1[i] - inputObject.workingDataValues2[i])
             inputObject.nanSanityCheck(3)        
         
@@ -965,26 +929,26 @@ def starmod(spcfFile, debugging = False):
             ###################################################################
             if(inputParams.writeOutputSpec):
                 wp = {'OBJECT': str("SUBTRACTED_" + inputObject.object) ,'MJD':inputObject.date, "NAXIS":1,"NAXIS1": nptsInputObj,"CRVAL1":str(inputObject.initialLambda), "CDELT1":str(inputObject.deltaStep), "CRPIX1":1, "CTYPE1":"LINEAR"}
-                if inputParams.substractedSpecName != None:
+                if inputParams.subtractedSpecName != None:
                     
-                    if (".fits" in inputParams.substractedSpecName.name):
-                        substractedSpecName0 = inputParams.substractedSpecName.name[:-5]
-                    elif (".dat" in inputParams.substractedSpecName.name):
-                        substractedSpecName0 = inputParams.substractedSpecName.name[:-4]
+                    if (".fits" in inputParams.subtractedSpecName.name):
+                        subtractedSpecName0 = inputParams.subtractedSpecName.name[:-5]
+                    elif (".dat" in inputParams.subtractedSpecName.name):
+                        subtractedSpecName0 = inputParams.subtractedSpecName.name[:-4]
                     else:
-                        substractedSpecName0 = inputParams.substractedSpecName.name
+                        subtractedSpecName0 = inputParams.subtractedSpecName.name
 
-                    substractedSpecPath = inputParams.workpath / "OUTFITS"
-                    if not os.access(substractedSpecPath, os.F_OK):
-                        os.mkdir(Path(substractedSpecPath))
-                    substractedSpecName_fits = os.path.join(substractedSpecPath, substractedSpecName0 + outputFilename + '.fits')
-                    inputObject.writeToFits(Path(substractedSpecName_fits), wp, 3)
+                    subtractedSpecPath = inputParams.workpath / "OUTFITS"
+                    if not os.access(subtractedSpecPath, os.F_OK):
+                        os.mkdir(Path(subtractedSpecPath))
+                    subtractedSpecName_fits = os.path.join(subtractedSpecPath, subtractedSpecName0 + outputFilename + '.fits')
+                    inputObject.writeToFits(Path(subtractedSpecName_fits), wp, 3)
                     
-                    substractedSpecPath = os.path.join(inputParams.workpath, "OUTDAT")
-                    if not os.access(substractedSpecPath, os.F_OK):
-                        os.mkdir(Path(substractedSpecPath))
-                    substractedSpecName_dat  = os.path.join(substractedSpecPath, substractedSpecName0 + outputFilename + '.dat')
-                    inputObject.writeToDat (Path(substractedSpecName_dat) , 3)
+                    subtractedSpecPath = os.path.join(inputParams.workpath, "OUTDAT")
+                    if not os.access(subtractedSpecPath, os.F_OK):
+                        os.mkdir(Path(subtractedSpecPath))
+                    subtractedSpecName_dat  = os.path.join(subtractedSpecPath, subtractedSpecName0 + outputFilename + '.dat')
+                    inputObject.writeToDat (Path(subtractedSpecName_dat) , 3)
 
             ###################################################################
             #                That's all folks!
@@ -1004,39 +968,39 @@ def starmod(spcfFile, debugging = False):
             ##------------------------------------------------------------------------------##
 
             ###############################################################################
-            ########- Calculate the EW of the line-########################################
+            ########--- Calculate the EW of the line (or lines) ---########################
            
-            lambdas = tools.lambdaData("lambdas.dat", inputParams.ldo1_value, inputParams.ldo2_value)
-            
+            lambdas = tools.lambdaData(Path("data/lambdas.dat").name, inputParams.ldo1_value, inputParams.ldo2_value)
             if(inputParams.linespcf != 'NONE'):                             
                 ldoLineInput = lambdas.setLineInputbyKey(inputParams.linespcf)
-                print(inputParams.linespcf)
+                if debugging: print("Line: ", inputParams.linespcf)
                 try:
                     if(nstar == 1):
                         if inputObject.RVfromFITS != 0.0: ## The CARMENES provided spectrum contains these parameters in the fits headings
                             inputBaryCorr = inputObject.BaryCorr
                             inputValue = inputObject.RVfromFITS + inputBaryCorr
-                            print ("inputValue = ",inputValue)
+                            if debugging: print ("inputValue = ",inputValue)
                         else:                            ## General spectrum. No RV or barycentric correction available in fits headings
                             inputBaryCorr = inputObject.BaryCorr = 0
                             inputValue = inputParams.PRMRad[0]
-                            print ("inputValue (no RVfromFITS) = ",inputValue)
+                            if debugging: print ("inputValue (no RVfromFITS) = ",inputValue)
                         ldoObs = lambdas.calculateDopplerDisplacement(inputValue)
-                        print (ldoObs)
+                        if debugging: print ("LDO from Doppler displacement:", ldoObs)
                         ldoObs, param2, param5, param6, param3, param4 = lambdas.getMaximumValue(inputObject, inputValue, inputParams.FindMax_Tolerance) # ldoObs is modified within getMaximumValues
                     elif (nstar == 2 and inputParams.ldo1_value ==-1 and inputParams.ldo2_value == -1):
                         inputValue     = inputParams.PRMRad[0]
                         inputValue2    = inputParams.SECRad[0]
                         ldoObs,ldoObs2 = lambdas.calculateDopplerDisplacement(inputValue,inputValue2, True)
-                        print (lambdas.ldoObs, lambdas.ldoObs2)
+                        if debugging: print (lambdas.ldoObs, lambdas.ldoObs2)
                         if lambdas.ldoObs > lambdas.ldoObs2: #preparing for getMaximumValue
                             lambdas.ldoObs, lambdas.ldoObs2 = lambdas.ldoObs2 , lambdas.ldoObs
                             ldoObs , ldoObs2 = ldoObs2 , ldoObs 
-                        print (lambdas.ldoObs, lambdas.ldoObs2)
-                        print (ldoObs, ldoObs2)
+                        if debugging: 
+                            print (lambdas.ldoObs, lambdas.ldoObs2)
+                            print (ldoObs, ldoObs2)
                         ldoObs, param2, param5, param6, ldoObs2, param4 = lambdas.getMaximumValue(inputObject, lambdas.ldoObs, inputParams.FindMax_Tolerance, 2, lambdas.ldoObs2) # ldoObs is modified within getMaximumValues
                     elif (nstar == 2 and inputParams.ldo1_value !=-1 and inputParams.ldo2_value != -1):
-                        # Values "manually" determined
+                        # Values "manually" selected. IT MUST BE SELECTED BOTH ldoX_value's 
                         lambdas.ldoObs  = ldoObs  = inputParams.ldo1_value
                         lambdas.ldoObs2 = ldoObs2 = inputParams.ldo2_value
                         param2 = 1
@@ -1047,9 +1011,9 @@ def starmod(spcfFile, debugging = False):
                         param6 = factorEnd*ldoObs
 
                     if (inputObject.RVfromFITS != 0.0):
-                        print("ldoObs = ", ldoObs, " !!! ")
+                        if debugging: print("ldoObs = ", ldoObs, " !!! ")
                     else:
-                        print(ldoObs, param2)
+                        if debugging: print(ldoObs, param2)
                         vRad = lambdas.calculateRadialVelocityfromDopplerDisplacement()
                         ldoLineInput = lambdas.setLineInputbyValue(ldoObs)
                     if nstar == 1:
@@ -1063,20 +1027,18 @@ def starmod(spcfFile, debugging = False):
                     
                     ldoLineStart = lambdas.setLineStart(ldo - ldoLineInput[1])
                     ldoLineEnd   = lambdas.setLineEnd  (ldo + ldoLineInput[1])
-                    if (inputObject.RVfromFITS == 0.0):
+                    if (inputObject.RVfromFITS == 0.0 and debugging):
                         print ("ldoLineInput= ", ldoLineInput[0], "\nldoLineStart= ", ldoLineStart, "ldoLineEnd= ", ldoLineEnd)
 
-                    print ("deltaStep = ", deltaStepProc)
+                    if debugging: print ("deltaStep = ", deltaStepProc)
                     ## The following allows to select the subset of points of the subtracted spectrum on which we calculate the EW
                     lambdas.selectLambdaRanges(inputObject.workingLambdaValues, deltaStepProc)
-                    # if nstar == 1:
-                    #     EWpopt = lambdas.CalculateEW(inputObject)
-                    # elif nstar == 2:
-                    EWpopt = lambdas.CalculateEW(inputObject, nstar, initial_weight=inputParams.PRMWeight[0], initial_weight2=inputParams.SECWeight[0])
+                    
+                    EWpopt = lambdas.CalculateEW(inputObject, nstar, debugging, initial_weight=inputParams.PRMWeight[0], initial_weight2=inputParams.SECWeight[0])
                     
                     EW1, EW2, star1_spectrum, star2_spectrum, flambdavalues, summ_up, abs_error, rel_error = EWpopt
                     
-                    FWHM = lambdas.getFWHM(inputObject)
+                    FWHM = lambdas.getFWHM(inputObject, debugging)
                     SNR = max(inputObject.SNR, primaryStar.SNR)
                     errorEW = lambdas.calculateErrorCayrelFormulae(FWHM,deltaStepProc,SNR)
                     equivalent_widths_var = []
@@ -1100,20 +1062,20 @@ def starmod(spcfFile, debugging = False):
                     #########################################
 
                     # found = len(inputParams.workpath) - inputParams.workpath.find('\\')
-                    if (debugging == True): print(inputParams.workpath)
+                    if (debugging == True): print("IM_PATH: ", inputParams.workpath)
                     if (inputParams.resultspath == None or inputParams.resultspath.name == '') :
-                        inputParams.resultspath = Path(".\\")
+                        inputParams.resultspath = Path("./")
                     else:
                         if not os.access(Path(inputParams.resultspath), os.F_OK): 
                             os.mkdir(Path(inputParams.resultspath))
-                    print(Path(inputParams.resultspath))
+                    if (debugging == True): print(Path(inputParams.resultspath))
                     respath = os.path.join(Path(inputParams.resultspath, "RES"))
-                    print(Path(respath))    
+                    if (debugging == True): print("RES_PATH: ", Path(respath))    
 
                     if not os.access(Path(respath), os.F_OK):
                         os.mkdir(Path(respath))
                     ewOutfile = open(os.path.join(respath, inputObject.object + "_" + inputParams.linespcf), 'a')
-                    print (Path(ewOutfile.name))
+                    if (debugging == True): print (Path(ewOutfile.name))
                     if nstar == 1:
                         ewOutfile.write(str(inputObject.date)+ "  " + str(EW1) + "  " + str(errorEW) + "  " + str(inputParams.PRMRad[0]) + "  " + str(inputObject.BaryCorr) + "  " + str(inputParams.PRMRot[0]) + '\n')
                     elif nstar == 2 and EW1 != None and EW2 != None:
@@ -1129,7 +1091,7 @@ def starmod(spcfFile, debugging = False):
 
             if(inputParams.linespcf == 'NONE'):
                 ldoObs  = None
-                ldoObs2 = None
+                lambdas.ldoObs2 = None
                 param2 = None
                 param4 = None
                 param5 = None
@@ -1162,9 +1124,12 @@ def starmod(spcfFile, debugging = False):
                 "debugging": debugging
             }
 
-            _build_plot_(payload)
-            if debugging == True:
-                plt.show()
+            ###### The following function must be called even if
+            ###### plot == False,  to save the figure in RESPATH
+            _build_plot_(payload, plot)
+            #####################
+            
+            #### Closng all I/O files
             if (".fits" in str(objectInputFITSfromList)):   inputObject.fits_hdu_in.close()
 
             primaryStar.fits_hdu_in.close()
@@ -1172,7 +1137,6 @@ def starmod(spcfFile, debugging = False):
             if (nstar == 3):    tertiaryStar.fits_hdu_in.close()
             
             if (inputParams.linespcf != 'NONE'):     ewOutfile.close()
-            # plt.close()
 
         ## NEXT SPECTRUM FILE
     except FileNotFoundError as e:
@@ -1181,7 +1145,7 @@ def starmod(spcfFile, debugging = False):
         # payload["error"] = str("File: ", e.filename, " Not Found.")
         return
     except PermissionError as e:
-        if e.errno == EACCES:
+        if e.errno == EACCESS:
             print("Cannot access ", e.filename, "file")
             return
         payload["error"] = str("Cannot access ", e.filename, "file")
@@ -1190,7 +1154,7 @@ def starmod(spcfFile, debugging = False):
 ## PROGRAM END 
 
 
-def _build_plot_(payload):
+def _build_plot_(payload, plot = True):
     
     ################ THIS FUNCTION ISOLATES PLOTTING FROM THE ALGORTIHM ##########
     ################ the payload conatains all paramters and objects needed to plot the different figures #######
@@ -1258,18 +1222,16 @@ def _build_plot_(payload):
 
 
     if len(workingLambdaValues) == len(workingDataValues22):
-            subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
-            subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
-            subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+        subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
     elif len(workingLambdaValues) >= len(workingDataValues22):
         subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
-        subPlot2.plot(workingLambdaValues[0:len(workingDataValues22)],
-                        workingDataValues22, 'r-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues[0:len(workingDataValues22)], workingDataValues22, 'r-', lw = 1.0)
         subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
     elif len(workingLambdaValues) <= len(workingDataValues22):
         subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
-        subPlot2.plot(workingLambdaValues,
-                        workingDataValues22[0:len(workingLambdaValues)], 'r-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues, workingDataValues22[0:len(workingLambdaValues)], 'r-', lw = 1.0)
         subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
 
     f.subplots_adjust(hspace = 0.3)
@@ -1277,7 +1239,8 @@ def _build_plot_(payload):
     dateTitle = str('{:6.4f}'.format(_date))
     
     strTitle = str(_object) + "@" + str(dateTitle) + "_" + inputParams.linespcf 
-    
+    if (inputParams.wvl_display_range[0] != -1 and inputParams.wvl_display_range[1] != -1): 
+        subPlot1.set_xlim(inputParams.wvl_display_range[0],inputParams.wvl_display_range[1])
     # # CaIIH&K
     if(inputParams.linespcf == "CaIIH" or inputParams.linespcf == "CaIIK"):
         subPlot1.set_title("Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
@@ -1292,17 +1255,17 @@ def _build_plot_(payload):
         subPlot1.set_ylim(-1.0, inputParams.MaxFluxDisplayed_Sub)
         subPlot2.set_title(_object + "@" + dateTitle + "  &  Synthetic Spectra for " + r"$H\beta$", font = 'serif', size= 18)
         subPlot2.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Obj)
-        subPlot1.set_xlim(4850,4890)
-        subPlot2.set_xlim(4850,4890)
-        
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(4850,4890)
+            
     # # HeD3 NaD2/NaD1
     elif(inputParams.linespcf == 'HeD3' or inputParams.linespcf == 'NaD2' or inputParams.linespcf == 'NaD1'):
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot1.set_ylim(-1.0, inputParams.MaxFluxDisplayed_Sub)
         subPlot2.set_title(_object + "@" + dateTitle + "  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot2.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Obj)
-        subPlot1.set_xlim(5860,5910)
-        subPlot2.set_xlim(5860,5910)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(5860,5910)
 
     # # Halpha
     elif(inputParams.linespcf == 'Halpha'):
@@ -1310,62 +1273,70 @@ def _build_plot_(payload):
         subPlot2.set_title(_object + "@" + dateTitle + "  &  Synthetic Spectra for " + r"$H\alpha$", font = 'serif', size= 18)
         subPlot2.set_ylim(0.0, inputParams.MaxFluxDisplayed_Obj)
         subPlot1.set_ylim(-1.0, inputParams.MaxFluxDisplayed_Sub)
-        subPlot1.set_xlim(6550,6580)
-        subPlot2.set_xlim(6550,6580)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(6550,6580)
+
     #  CaIRT-a
     elif(inputParams.linespcf == 'CaIRT-a'):
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot1.set_ylim(-0.75, inputParams.MaxFluxDisplayed_Sub)
         subPlot2.set_ylim(0.25,inputParams.MaxFluxDisplayed_Obj)
-        subPlot1.set_xlim(8465,8535)
-        subPlot2.set_xlim(8465,8535)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(8465,8535)
+
     elif(inputParams.linespcf == 'CaIRT-b'):
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot1.set_ylim(-0.75, inputParams.MaxFluxDisplayed_Sub)
         subPlot2.set_ylim(0.0,inputParams.MaxFluxDisplayed_Obj)
-        subPlot1.set_xlim(8535,8550)
-        subPlot2.set_xlim(8535,8550)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(8535,8550)
+
     elif(inputParams.linespcf == 'CaIRT-c'):
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot1.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Sub)
         subPlot2.set_ylim(0.,inputParams.MaxFluxDisplayed_Obj)
-        subPlot1.set_xlim(8600,8680)
-        subPlot2.set_xlim(8600,8680)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(8600,8680)
+
     # # #################### Paschen D
     elif(inputParams.linespcf == 'PaschenD'):
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot2.set_ylim(0.25, inputParams.MaxFluxDisplayed_Obj)
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot1.set_ylim(-0.25, inputParams.MaxFluxDisplayed_Sub)
-        subPlot1.set_xlim(10040,10065)
-        subPlot2.set_xlim(10040,10065)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(10040,10065)
+
     #  ##################### HeI10830
     elif(inputParams.linespcf == 'HeI10833'):
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot2.set_ylim(0.25, inputParams.MaxFluxDisplayed_Obj)
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot1.set_ylim(-0.25, inputParams.MaxFluxDisplayed_Sub)
-        subPlot1.set_xlim(10820,10860)
-        subPlot2.set_xlim(10820,10860)    
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(10820,10860)
+
     #  ##################### PaschenG
     elif(inputParams.linespcf == 'PaschenG'):
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot2.set_ylim(0.25, inputParams.MaxFluxDisplayed_Obj)
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot1.set_ylim(-0.25, inputParams.MaxFluxDisplayed_Sub)
-        subPlot1.set_xlim(10920,10955)
-        subPlot2.set_xlim(10920,10955)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(10920,10955)
+
     #  ##################### PaschenB
     elif(inputParams.linespcf == 'PaschenB'):
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
         subPlot2.set_ylim(0.5, inputParams.MaxFluxDisplayed_Obj)
         subPlot1.set_title(r"Subtracted Spectrum for "+ inputParams.linespcf + r" / $v_{\rm rot}sini$ = " + str('{:7.4f}'.format(inputParams.PRMRot[0])) + " km/s", font = 'serif', size= 18)
         subPlot1.set_ylim(-0.5, inputParams.MaxFluxDisplayed_Sub)
-        subPlot1.set_xlim(12800, 12840)
-        subPlot2.set_xlim(12800, 12840)
+        if (inputParams.wvl_display_range[0] == -1 and inputParams.wvl_display_range[1] == -1):
+            subPlot1.set_xlim(12800, 12840)
+            
     else:
     # Any
         subPlot2.set_title(_object + "@" + dateTitle +"  &  Synthetic Spectra for " + inputParams.linespcf, font = 'serif', size= 18)
@@ -1380,8 +1351,9 @@ def _build_plot_(payload):
     # plt.legend()
     # # At this point is supposed that a valid value of inputParams.resultspath has been assigned
     # # unless (inputParams.linespcf == "NONE")
+    if (debugging == True): print("Previous to search for RES, given resultspath: ", inputParams.resultspath)
     if (inputParams.resultspath == None or inputParams.resultspath.name == '') :
-        inputParams.resultspath = Path(".\\")
+        inputParams.resultspath = Path("./")
     else:
         if not os.access(Path(inputParams.resultspath), os.F_OK): 
             os.mkdir(Path(inputParams.resultspath))
@@ -1396,6 +1368,7 @@ def _build_plot_(payload):
     
     figureName_p = Path(figureName)
     f.savefig(figureName_p, dpi = 300)
-    # if (debugging == True): plt.show()
+    if (plot == True): 
+        plt.show()
     
     return f, subPlot1, subPlot2
