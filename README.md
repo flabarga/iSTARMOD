@@ -266,7 +266,7 @@ Expected:
 ### Reproducing Binary Star Cases (SB2)
 
 ```bash
-python iStarmod.py 
+istarmod configsm/nrej1101_n3_ha.sm --plot 
 ```
 
 Expected:
@@ -297,12 +297,12 @@ Naming convention:
 - Install dependencies  
 - Download or link datasets  
 - Run `.sm` configurations  
-- Execute plotting scripts  
+- Execute plotting scripts (the iSTARMOD scripts with the --plot option) 
 - Compare outputs with paper figures  
 
 ---
 
-### ⚠️ Notes
+### ⚠️ IMPORTANT NOTES
 
 Results depend critically on:
 - reference star selection
