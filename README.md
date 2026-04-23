@@ -36,31 +36,71 @@ The code operates **order-by-order on echelle spectra**, improving robustness ag
 
 ---
 ## 🚀 Installation
-Option 1 — From GitHub 
+Requirements
+
+ - Python 3.10 or later
+ - pip
+ - venv (recommended)
+
+Linux / macOS
 
 Clone the repository and install locally:
+
 ```bash
 git clone https://github.com/<USER>/iSTARMOD.git
 cd iSTARMOD
 git checkout v11
 
 python -m venv .venv
-source .venv/bin/activate   # On Windows: .venv\\Scripts\\activate
+source .venv/bin/activate
 
+python -m pip install --upgrade pip setuptools wheel
 pip install .
 ```
 
-Option 2 — From GitHub Release Archive (recommended)
-1. Download release v11 from the GitHub Releases page
-2. Extract the archive
-3. Open a terminal in the extracted folder
+Windows (PowerShell)
 
-Then run:
+Clone the repository and install locally:
+
+```bash
+git clone https://github.com/<USER>/iSTARMOD.git
+cd iSTARMOD
+git checkout v11
+
+python -m venv .venv
+.\.venv\Scripts\Activate
+
+python -m pip install --upgrade pip setuptools wheel
+pip install .
+```
+
+If PowerShell blocks activation, run once:
+
+```bash
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+and then activate again:
+
+```bash
+.\.venv\Scripts\Activate
+```
+Windows (without activation)
+
+If you prefer, you can install without activating the environment:
+
 ```bash
 python -m venv .venv
-source .venv/bin/activate
-pip install .
+.\.venv\Scripts\python -m pip install --upgrade pip setuptools wheel
+.\.venv\Scripts\python -m pip install .
 ```
+
+Install from a GitHub release archive
+1. Download release v11 from the GitHub Releases page.
+2. Extract the archive.
+3. Open a terminal in the extracted folder.
+4. Follow the Linux/macOS or Windows instructions above.
+
 
 Dependencies include:
 
@@ -90,6 +130,8 @@ Enable debugging output:
 ```bash
 istarmod configsm/example.sm --debug
 ```
+---
+
 ## 🖥️ GUI
 Launch the graphical interface:
 ```bash
@@ -115,12 +157,25 @@ istarmod-gui
 istarmod configsm/pwand_n3_cah_34_wvl.sm --plot
 ```
 
-This will:
+This command will:
 
 - build the synthetic spectrum
 - subtract it from the observed spectrum
 - compute equivalent widths
 - optionally display plots
+
+---
+
+⚠️ GUI / plotting note
+
+If you use the GUI or plotting features, tkinter may be required.
+
+ - On Ubuntu/Debian:
+```bash
+sudo apt-get install python3-tk
+```
+
+On Windows, tkinter is usually included with the standard Python installation.
 
 ## ▶️ Quick Start
 
