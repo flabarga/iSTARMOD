@@ -7,7 +7,7 @@ name = "iSTARMOD"
 version = "11.0"
 description = "Python tools for spectral subtraction and chromospheric activity analysis in cool stars"
 readme = "README.md"
-requires-python = ">=3.50"
+requires-python = ">=3.5"
 license = {file = "LICENSE"}
 authors = [
   { name = "Fernando Labarga", email="flabarga@ucm.es" },
