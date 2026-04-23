@@ -277,18 +277,12 @@ Expected:
 
 ### 📁 Paper Configurations
 
-Several configurations used in the publication are stored in:
+Several configurations used in the publication are stored in the .sm folder of this project:
 
 ```
-configs/paper/
+configsm
 ```
-
-Naming convention:
-
-```
-<target>_<line>_<instrument>.sm
-```
-
+That is, the examples shown in the paper are the same as the examples of this project
 
 ---
 
@@ -330,6 +324,7 @@ If you use this code, please cite:
 Labarga, F. & Montes, D. (2026)
 iSTARMOD: A Python Code to Quantify Chromospheric Activity
 The Astronomical Journal, 171, 15
+https://doi.org/10.3847/1538-3881/ae173e 
 ```
 
 ---
