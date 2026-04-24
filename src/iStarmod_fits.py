@@ -447,6 +447,9 @@ class FITSObject(object):
         while(len(flux)<len(self.workingLambdaValues)):
             flux.append(0.0)
         
+        while(len(self.workingLambdaValues)<len(flux)):
+            self.workingLambdaValues.append(self.finalLambda + self.deltaStep)
+
         data = np.vstack([self.workingLambdaValues, flux])
 
         hdu = fits.PrimaryHDU(data)
