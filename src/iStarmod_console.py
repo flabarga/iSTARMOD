@@ -969,8 +969,8 @@ def starmod(spcfFile, plot = True, debugging = False):
 
             ###############################################################################
             ########--- Calculate the EW of the line (or lines) ---########################
-           
-            lambdas = tools.lambdaData(Path("data/lambdas.dat").name, inputParams.ldo1_value, inputParams.ldo2_value)
+            
+            lambdas = tools.lambdaData(Path("data/lambdas.dat"), inputParams.ldo1_value, inputParams.ldo2_value)
             if(inputParams.linespcf != 'NONE'):                             
                 ldoLineInput = lambdas.setLineInputbyKey(inputParams.linespcf)
                 if debugging: print("Line: ", inputParams.linespcf)
@@ -1219,21 +1219,43 @@ def _build_plot_(payload, plot = True):
                         subPlot1.plot(ldoObs, param2, 'b+')
                     if summ_up != None:
                         subPlot1.plot(flambdavalues, summ_up, c = 'm', linestyle = 'dashed', lw = 1.25)
+    
+    ndebugLambda = len(workingLambdaValues)
+    ndebugData22 = len(workingDataValues22)
+    ndebugData21 = len(workingDataValues21)
+    ndebugData13 = len(workingDataValues13)
 
-
-    if len(workingLambdaValues) == len(workingDataValues22):
+    if (len(workingLambdaValues) == len(workingDataValues21) and 
+        len(workingLambdaValues) == len(workingDataValues22) and
+        len(workingLambdaValues) == len(workingDataValues13)):
         subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
         subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
         subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
-    elif len(workingLambdaValues) >= len(workingDataValues22):
+    elif len(workingLambdaValues) > len(workingDataValues21):
+        subPlot2.plot(workingLambdaValues[0:len(workingDataValues21)], workingDataValues21, 'b-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+        subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
+    elif len(workingLambdaValues) < len(workingDataValues21):
+        subPlot2.plot(workingLambdaValues, workingDataValues21[0:len(workingLambdaValues)], 'b-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+        subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
+    elif len(workingLambdaValues) > len(workingDataValues22):
         subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
         subPlot2.plot(workingLambdaValues[0:len(workingDataValues22)], workingDataValues22, 'r-', lw = 1.0)
         subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
-    elif len(workingLambdaValues) <= len(workingDataValues22):
+    elif len(workingLambdaValues) < len(workingDataValues22):
         subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
         subPlot2.plot(workingLambdaValues, workingDataValues22[0:len(workingLambdaValues)], 'r-', lw = 1.0)
         subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
-
+    elif len(workingLambdaValues) > len(workingDataValues13):
+        subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+        subPlot1.plot(workingLambdaValues[0:len(workingDataValues13)], workingDataValues13, 'g-', lw = 1.0)
+    elif len(workingLambdaValues) < len(workingDataValues13):
+        subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
+        subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+        subPlot1.plot(workingLambdaValues, workingDataValues13[0:len(workingLambdaValues)], 'g-', lw = 1.0)
+    
     f.subplots_adjust(hspace = 0.3)
 
     dateTitle = str('{:6.4f}'.format(_date))
