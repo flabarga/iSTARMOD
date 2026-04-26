@@ -28,8 +28,8 @@ If you use this code, please cite:
 
 ```
 Labarga, F. & Montes, D. (2026)
-iSTARMOD: A Python Code to Quantify Chromospheric Activity
-The Astronomical Journal, 171, 15
+iSTARMOD: A Python Code to Quantify Chromospheric Activity by Using the Spectral Subtraction Technique
+The Astronomical Journal, 171, 15, 2026 January 
 https://doi.org/10.3847/1538-3881/ae173e 
 ```
 
