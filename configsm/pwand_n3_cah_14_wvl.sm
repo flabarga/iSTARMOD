@@ -4,55 +4,55 @@
 ###### The syntax is 'KEYWORD = value' with one statement per line
 
 ###### GENERAL INFORMATION
-IM_PATH  = /target  			# path of fits spectra (optional)
-OBJ_NAME = npwand_n3.fits       # object name
+IM_PATH = target       # path of fits spectra (optional)
+OBJ_NAME = npwand_n3.fits             # object name
 
 ###### OUTPUT SPECTRA
-SYN_SPEC = YES                 # write output spectra: YES/NO
-   SYN_NAME = synpwand_n3_cah_RML.fits # synthetised spectrum name
-   SUB_NAME = subpwand_n3_cah_RML.fits # substracted spectrum name (if SYN_SPEC =YES) 
+SYN_SPEC = YES                       # write output spectra: YES/NO
+SYN_NAME = synpwand_n3_cah_RML.fits       # synthetised spectrum name
+SUB_NAME = subpwand_n3_cah_RML.fits       # substracted spectrum name (if SYN_SPEC =YES) 
 
 
 ###### INTERPOLATION PARAMETERS
-N_ITER = 8                      # iteration number: integer
-PIX_ZONE = 8460 8530  wvl       # pixel range for the fit: 2 integers
-PIX_EXCL = 8460 8460  wvl       # 'BLUE EXCLUSION ZONE'	 skip pixel subrange: 2 integers (optional)
-PIX_EXCL = 8494 8502  wvl       # CaIRT-a ZONE    	 skip pixel subrange: 2 integers (optional)
-PIX_EXCL = 			# skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
-PIX_EXCL = 			# skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
-PIX_EXCL =			# skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
+N_ITER = 8   # iteration number: integer
+PIX_ZONE = 8450 8530  wvl   # pixel range for the fit: 2 integers
+PIX_EXCL = 8450 8455  wvl   # 'BLUE EXCLUSION ZONE'	 skip pixel subrange: 2 integers (optional)
+PIX_EXCL = 8494 8502  wvl             # CaIRT-a ZONE    	 skip pixel subrange: 2 integers (optional)
+PIX_EXCL =   # skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
+PIX_EXCL =   # skip pixel subrange: 2 integers (optional) # 6568 6575  wvl
+PIX_EXCL =   # skip pixel subrange: 2 integers (optional) # 6592 6594  wvl
 
 
 ###### PRIMARY STAR
-REF_PATH = /referencesp         # path for fits spectre
-PRM_NAME = nhd166620_n2.fits    # primary name
-PRM_RAD  = -20.00 var           # doppler shift: float, keyword (var/fix)
-PRM_ROT  = 22.521 var           # doppler broadening: float, keyword (var/fix)
-PRM_WGT  = 1.0 fix              # weight: float, keyword (var/fix)
+REF_PATH = referencesp       # path for fits spectre
+PRM_NAME = nhd166620_n2.fits          # primary name
+PRM_RAD = -46.00 var   # doppler shift: float, keyword (var/fix)
+PRM_ROT = 25.510 fix   # doppler broadening: float, keyword (var/fix)
+PRM_WGT = 1.0 fix                    # weight: float, keyword (var/fix)
 
 
 ###### SECONDARY STAR
-SEC_NAME =  NONE                # secondary name: name/NONE
-   SEC_RAD  =                   # doppler shift: float; 
-   SEC_ROT  =                   # doppler broadening: float; 
-   SEC_WGT  =                   # weight: float, keyword (var/fix)
+SEC_NAME = NONE                      # secondary name: name/NONE
+SEC_RAD =   # doppler shift: float;
+SEC_ROT =   # doppler broadening: float;
+SEC_WGT =   # weight: float, keyword (var/fix)
 
 ###### TERTIARY STAR
-TER_NAME =  NONE                # tertiary name: name/NONE
-   TER_RAD  =                   # doppler shift: float, keyword (var/fix)
-   TER_ROT  =                   # doppler broadening: float, keyword (var/fix)
-   TER_WGT  =                   # weight: float, keyword (var/fix)
+TER_NAME = NONE                      # tertiary name: name/NONE
+TER_RAD =   # doppler shift: float, keyword (var/fix)
+TER_ROT =   # doppler broadening: float, keyword (var/fix)
+TER_WGT =   # weight: float, keyword (var/fix)
 
 ###### SPECTRA FOPRMAT
-MODE=  ech                      # spectra format if multidimensionnal: mult/ech
-   APERTURE=  14                # aperture number : integer
-   BAND=                        # band number : integer (UNUSED)
-   LINE= CaIRT-a		# To specify the LINE in order to evaluate the EW
-					# The definition must be compliant with the specification of
-					# the config. file "lambdas.dat"
+MODE = ech                        # spectra format if multidimensionnal: mult/ech
+APERTURE = 14                     # aperture number : integer
+BAND =   # band number : integer (UNUSED)
+LINE = CaIRT-a      	          # To specify the LINE in order to evaluate the EW
+				              # The definition must be compliant with the specification of
+					          # the config. file "lambdas.dat"
 ###### ALGORITHM & VISUALISATION PARAMS
-MAXFLUXDISP_OBJ = 1.75 			# Max. flux to display in the object+ref spectra window
-MAXFLUXDISP_SUB = 0.75 			# Max. flux to display in the subtracted spectrum window
-FINDMAX_TOLERANCE = 0.001		# to find the maximum of the subtracted spectra @ calculating the integral 
+MAXFLUXDISP_OBJ = 1.75       	  # Max. flux to display in the object+ref spectra window
+MAXFLUXDISP_SUB = 0.75       	  # Max. flux to display in the subtracted spectrum window
+FINDMAX_TOLERANCE = 0.001      	  # to find the maximum of the subtracted spectra @ calculating the integral 
 ################################# END #########################################
 
