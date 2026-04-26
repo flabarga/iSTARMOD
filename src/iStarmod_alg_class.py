@@ -965,7 +965,7 @@ class iStarmodGUI():
                     ###############################################################################
                     ########--- Calculate the EW of the line (or lines) ---########################
                 
-                    lambdas = tools.lambdaData(Path("data/lambdas.dat").name, inputParams.ldo1_value, inputParams.ldo2_value)
+                    lambdas = tools.lambdaData(Path("data/lambdas.dat"), inputParams.ldo1_value, inputParams.ldo2_value)
                     if(inputParams.linespcf != 'NONE'):                             
                         ldoLineInput = lambdas.setLineInputbyKey(inputParams.linespcf)
                         if debugging: print("Line: ", inputParams.linespcf)

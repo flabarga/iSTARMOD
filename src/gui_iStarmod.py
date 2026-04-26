@@ -687,7 +687,7 @@ class SMEditorApp(tk.Tk, iStarmodGUI):
         from iStarmod_tools import lambdaData as lambdas
         self.ax.cla()
         x = np.linspace(zone[0] - 20, zone[1] + 20, 2000)
-        l = lambdas("lambdas.dat")
+        l = lambdas("data/lambdas.dat")
         for key, value in l.lambdaDataDict.items():
             flambda = float(value[0])
             if (flambda > zone[0] and flambda < zone[1]):
@@ -862,19 +862,37 @@ class SMEditorApp(tk.Tk, iStarmodGUI):
                             subPlot1.plot(flambdavalues, summ_up, c = 'm', linestyle = 'dashed', lw = 1.25)
 
 
-        if len(workingLambdaValues) == len(workingDataValues22):
+        if (len(workingLambdaValues) == len(workingDataValues21) and 
+            len(workingLambdaValues) == len(workingDataValues22) and
+            len(workingLambdaValues) == len(workingDataValues13)):
             subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
             subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
             subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
-        elif len(workingLambdaValues) >= len(workingDataValues22):
+        elif len(workingLambdaValues) > len(workingDataValues21):
+            subPlot2.plot(workingLambdaValues[0:len(workingDataValues21)], workingDataValues21, 'b-', lw = 1.0)
+            subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+            subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
+        elif len(workingLambdaValues) < len(workingDataValues21):
+            subPlot2.plot(workingLambdaValues, workingDataValues21[0:len(workingLambdaValues)], 'b-', lw = 1.0)
+            subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+            subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
+        elif len(workingLambdaValues) > len(workingDataValues22):
             subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
             subPlot2.plot(workingLambdaValues[0:len(workingDataValues22)], workingDataValues22, 'r-', lw = 1.0)
             subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
-        elif len(workingLambdaValues) <= len(workingDataValues22):
+        elif len(workingLambdaValues) < len(workingDataValues22):
             subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
             subPlot2.plot(workingLambdaValues, workingDataValues22[0:len(workingLambdaValues)], 'r-', lw = 1.0)
             subPlot1.plot(workingLambdaValues, workingDataValues13, 'g-', lw = 1.0)
-
+        elif len(workingLambdaValues) > len(workingDataValues13):
+            subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
+            subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+            subPlot1.plot(workingLambdaValues[0:len(workingDataValues13)], workingDataValues13, 'g-', lw = 1.0)
+        elif len(workingLambdaValues) < len(workingDataValues13):
+            subPlot2.plot(workingLambdaValues, workingDataValues21, 'b-', lw = 1.0)
+            subPlot2.plot(workingLambdaValues, workingDataValues22, 'r-', lw = 1.0)
+            subPlot1.plot(workingLambdaValues, workingDataValues13[0:len(workingLambdaValues)], 'g-', lw = 1.0)
+    
         f.subplots_adjust(hspace = 0.3)
 
         dateTitle = str('{:6.4f}'.format(_date))

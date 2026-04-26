@@ -16,6 +16,8 @@ import os
 from pathlib import Path
 
 from scipy.optimize import*
+from scipy.integrate import trapezoid as trapz
+
 from astropy.time import Time
 from iStarmod_fits import *
 
@@ -483,8 +485,6 @@ class spcfParams(object):
                         if debugging: print ("secondaryStarfits: ", secondaryStarfits)
                 if 'SEC_RAD' in line:
                     if (self.secondaryStarfits != None and 'NONE' not in self.secondaryStarfits0):
-                      # start = line.find('=') + 1
-                    # end   = line.find(' #')  - 1   
                         line[start:end].split()
                         SECRadStr = line[start:end].split()
                         if SECRadStr != []:
@@ -494,7 +494,7 @@ class spcfParams(object):
                                 keyw = False                 
                             SECRad = [float(SECRadStr[0]),keyw]
                         self.SECRad = SECRad 
-                    if debugging: print ('SECRad = ',str(SECRad))
+                        if debugging: print ('SECRad = ',str(SECRad))
                     else:
                         self.SECRad = [0.0, False]
                 if 'SEC_ROT' in line:
@@ -523,6 +523,8 @@ class spcfParams(object):
                                 keyw = False                 
                             SECWeight = [float(SECWeightStr[0]),keyw]
                         self.SECWeight = SECWeight 
+                    else:
+                        self.SECWeight = [0.0, True]
                 if 'TER_PATH' in line:
                     # start = line.find('=') + 1
                     # end   = line.find(' #')  - 1
@@ -1220,14 +1222,14 @@ class lambdaData(object):
     
     def paint_diff(self, xdata, ydata, summ_up, popt):
         
-        from scipy.integrate import simps, quad
+        from scipy.integrate import simpson, quad
         # Datos y modelo
         amp1_fitted, mean1_fitted, gamma1_fitted, amp2_fitted, mean2_fitted, gamma2_fitted = popt
         x_fit = np.linspace(xdata[0], xdata[-1], len(summ_up))
         y_fit = self.combined_model_lorentzian(x_fit, *popt) + 1.0
 
         # Integral de los datos
-        int_data = simps(ydata, xdata)
+        int_data = simpson(ydata, xdata)
 
         # Integral del modelo
         int_model = quad(lambda x: self.combined_model_lorentzian(x, *popt) + 1, xdata[0], xdata[-1])[0]
@@ -1266,7 +1268,7 @@ class lambdaData(object):
             for it in range(len(fDataValues)):
                 fDataValues[it] = fDataValues[it] + 1.0
                 
-            EW = - (np.trapz(fDataValues,fLambdaValues) - 
+            EW = - (trapz(fDataValues,fLambdaValues) - 
                 (fDataValues[0] + fDataValues[len(fDataValues)-1]) * deltaLambda / 2) #Area of trapezium below pushed-up continuum 
             return EW, None, None, None, None, None, None, None
         
@@ -1322,7 +1324,7 @@ class lambdaData(object):
                     for it in range(len(fDataValues2)):
                         fDataValues2[it] = fDataValues2[it] + 1.0
                     
-                    EW = - (np.trapz(fDataValues2,fLambdaValues) - 
+                    EW = - (trapz(fDataValues2,fLambdaValues) - 
                         (fDataValues2[0] + fDataValues2[len(fDataValues)-1]) * deltaLambda / 2) 
                     #Area of trapezium below pushed-up continuum 
                     return EW, None, fDataValues, fDataValues, fLambdaValues, None, None, None
@@ -1338,9 +1340,9 @@ class lambdaData(object):
             epopt = self.CalculateEWError(payloadEWerror)
             star1_spectrum_trapz, star2_spectrum_trapz, summ_up, abs_error, rel_error = epopt
 
-            EW1 = - (np.trapz(star1_spectrum_trapz,fLambdaValues) - 
+            EW1 = - (trapz(star1_spectrum_trapz,fLambdaValues) - 
                 (star1_spectrum_trapz[0] + star1_spectrum_trapz[len(star1_spectrum_trapz)-1]) * deltaLambda / 2) #Area of trapezium below pushed-up continuum 
-            EW2 = - (np.trapz(star2_spectrum_trapz,fLambdaValues) - 
+            EW2 = - (trapz(star2_spectrum_trapz,fLambdaValues) - 
                 (star2_spectrum_trapz[0] + star2_spectrum_trapz[len(star2_spectrum_trapz)-1]) * deltaLambda / 2) #Area of trapezium below pushed-up continuum 
 
             return EW1, EW2, star1_spectrum, star2_spectrum, fLambdaValues, summ_up, abs_error, rel_error
@@ -1348,7 +1350,7 @@ class lambdaData(object):
 
     def CalculateEWError(self, payloadEWError):
         
-        from scipy.integrate import simps, quad
+        from scipy.integrate import simpson, quad
             
         fLambdaValues   = payloadEWError["fLambdaValues"]
         fDataValues     = payloadEWError["fDataValues"]            
@@ -1370,9 +1372,9 @@ class lambdaData(object):
         
         ### Calculation of the error ##############################################################
         # self.paint_diff (fLambdaValues, fDataValues, summ_up, popt)
-        int_data = simps(fDataValues, fLambdaValues) # Integral of the original data 
+        int_data = simpson(fDataValues, fLambdaValues) # Integral of the original data 
         int_model1 = quad(lambda x: self.combined_model_lorentzian(x, *popt) + 1.0, fLambdaValues[0], fLambdaValues[-1])[0]# Integral of the adjusted model
-        int_model2 = simps(summ_up_trapz,fLambdaValues)
+        int_model2 = simpson(summ_up_trapz,fLambdaValues)
         abs_error = int_model2 - int_data # Absolute error
         rel_error = 100 * abs(abs_error) / abs(int_data) # Relative error 
         print("int_data = ", int_data, ";  int_model1 = ", int_model1, ";  int_model2 = ", int_model2)
