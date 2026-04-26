@@ -65,7 +65,7 @@ py-modules = [
   "iStarmod_rvvalues",
   "iStarmod_tools",
   "starot",
-  "support"
+  "support",
   "unittestreadFITS_canvas"
 ]
 
