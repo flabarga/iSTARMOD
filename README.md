@@ -22,6 +22,19 @@ These measurements can be converted into **chromospheric fluxes** using χ-facto
 
 ---
 
+## Citation
+
+If you use this code, please cite:
+
+```
+Labarga, F. & Montes, D. (2026)
+iSTARMOD: A Python Code to Quantify Chromospheric Activity
+The Astronomical Journal, 171, 15
+https://doi.org/10.3847/1538-3881/ae173e 
+```
+
+---
+
 ## ⚙️ Features
 
 - Iterative least-squares spectral fitting  
@@ -95,11 +108,11 @@ python -m venv .venv
 .\.venv\Scripts\python -m pip install .
 ```
 
-*Install from a GitHub release archive*
-1. Download release v11 from the GitHub Releases page.
+## Install from a GitHub release archive - (recommended)
+1. Download latest release (v11.2) from the GitHub Releases page.
 2. Extract the archive.
 3. Open a terminal in the extracted folder.
-4. Follow the Linux/macOS or Windows instructions above.
+4. Follow the *Linux/macOS* or *Windows* instructions above.
 
 
 Dependencies include:
@@ -115,7 +128,7 @@ Dependencies include:
 ---
 
 ## ▶️ Usage
-Run iSTARMOD from the repository root directory:
+The compressed files define a folder structure. Then, from the root directory of the repository run iSTARMOD as:
 
 ```bash
 istarmod configsm/example.sm
@@ -133,7 +146,7 @@ istarmod configsm/example.sm --debug
 ---
 
 ## 🖥️ GUI
-Launch the graphical interface:
+Quite simple. Launch the graphical interface:
 ```bash
 istarmod-gui
 ```
@@ -141,7 +154,7 @@ istarmod-gui
 ## 📁 Important Notes. Repository-dependent files
 - The .sm configuration file defines the full workflow (input spectra, references, fitting parameters, etc.)
 - The code expects access to repository folders such as:
- 
+
  ```
  configsm/     → configuration files (.sm)
  target/       → target spectra
@@ -179,13 +192,13 @@ On Windows, tkinter is usually included with the standard Python installation.
 
 ## ▶️ Quick Start
 
-1. Prepare your observed spectrum (FITS or ASCII)
-2. Select appropriate **reference star spectrum(s)**
-3. Create a configuration file (`.sm`)
+1. Prepare your observed spectrum (FITS or ASCII) and copy them to **target** folder (can be in a sub-folder).
+2. Select appropriate **reference star spectrum(s)** and copy them to **referencsp** folder.
+3. Create a configuration file (`.sm`) in the **configsm** or any other folder you select.
 4. Run:
 
 ```bash
-istarmod anyfolder/target.sm --plot
+istarmod anyfolder/observedspectrum.sm --plot
 ```
 
 >⚠️ Note: Within iStarmod.py you must include the name of the .sm file as an input parameter in the call to the function starmod
@@ -254,13 +267,15 @@ LINE = Halpha
 
 #### 7. Additional Algorithm & Visualization Parameters
 ```ini
-WVL_DISPLAY_RANGE = 6550 6580            
+WVL_DISPLAY_RANGE = 6550 6580      
 USE_RV_VALUES = NO  
 ```
 >⚠️ Note:
 >The WVL_DISPLAY_RANGE additional parameter allows defining the wavelength zone to be displayed in the output figure
 >The USE_RV_VALUES additional parameter allows storing the RV values calculated in previous runs of the algorithm.
-
+>When working with binary star observed spectra, you may need to manually define the wavelength of the each peak of excess emission. Then you can define
+ >LDO1_VALUE = XXXXX in Angström, for the primary star 
+ >LDO2_VALUE = XXXXX in Añnström, for the secondary star
 ---
 
 ## 🔄 Workflow
@@ -351,14 +366,14 @@ That is, the examples shown in the paper are the same as the examples of this pr
 
 ---
 
-### ⚠️ IMPORTANT NOTES
+### ⚠️ IMPORTANT NOTE
 
 Results depend critically on:
 - reference star selection
-- spectral type matching  
+- spectral type (then Teff) and metallicity matching  
 - S/N and normalization quality  
 
-Small variations may affect RMS and EW values.
+Small variations of spectral type matching and metallicity may affect RMS and EW values.
 
 ---
 
@@ -369,18 +384,6 @@ Small variations may affect RMS and EW values.
 - Spectroscopic surveys  
 - Radial velocity activity mitigation  
 
----
-
-## Citation
-
-If you use this code, please cite:
-
-```
-Labarga, F. & Montes, D. (2026)
-iSTARMOD: A Python Code to Quantify Chromospheric Activity
-The Astronomical Journal, 171, 15
-https://doi.org/10.3847/1538-3881/ae173e 
-```
 
 ---
 
